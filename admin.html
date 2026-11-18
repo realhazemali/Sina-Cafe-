@@ -1,0 +1,1363 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sina Café | لوحة التحكم وإدارة المنيو</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&family=Cormorant+Garamond:wght@600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg-main: #F3E5D0;
+            --bg-card: #FDF8F2;
+            --color-primary: #4A2511;
+            --color-accent: #C86D2D;
+            --text-main: #2B150A;
+            --text-muted: #6E5343;
+            --border-subtle: #E2CEB5;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            font-family: 'Cairo', sans-serif;
+            min-height: 100vh;
+        }
+
+        .font-luxury {
+            font-family: 'Cormorant Garamond', serif;
+        }
+
+        .admin-card {
+            background-color: var(--bg-card);
+            border: 1.5px solid var(--border-subtle);
+            box-shadow: 0 8px 24px -6px rgba(74, 37, 17, 0.08);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--color-primary) 0%, #633319 100%);
+            color: var(--bg-card);
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+        .btn-primary:hover {
+            opacity: 0.95;
+            transform: translateY(-1px);
+        }
+
+        .btn-accent {
+            background: linear-gradient(135deg, var(--color-accent) 0%, #B05A1E 100%);
+            color: #FFFFFF;
+            font-weight: 700;
+            transition: all 0.2s ease;
+        }
+        .btn-accent:hover {
+            opacity: 0.95;
+            transform: translateY(-1px);
+        }
+
+        .input-field {
+            background-color: #FFFFFF;
+            border: 1.5px solid var(--border-subtle);
+            color: var(--text-main);
+            transition: border-color 0.2s ease;
+        }
+        .input-field:focus {
+            outline: none;
+            border-color: var(--color-accent);
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: var(--bg-main);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-accent);
+            border-radius: 9999px;
+        }
+    </style>
+</head>
+<body class="selection:bg-[#C86D2D] selection:text-white">
+
+    <!-- Login Lock Screen -->
+    <div id="loginScreen" class="fixed inset-0 z-50 bg-[#F3E5D0] flex items-center justify-center p-4">
+        <div class="admin-card rounded-3xl max-w-md w-full p-8 text-center border-2 border-[#4A2511]">
+            <h1 class="font-luxury text-4xl font-bold text-[#4A2511] tracking-wider uppercase">Sina Café</h1>
+            <p class="text-xs font-bold text-[#C86D2D] tracking-widest uppercase mt-1 mb-6">Admin Control Panel</p>
+
+            <div class="bg-[#F3E5D0]/60 border border-[#E2CEB5] rounded-2xl p-4 mb-5 text-sm text-[#6E5343]">
+                أدخل رمز الدخول للتحكم في المنيو والأسعار
+            </div>
+
+            <form onsubmit="handleLogin(event)" class="space-y-4">
+                <input 
+                    type="password" 
+                    id="pinInput" 
+                    placeholder="رمز الدخول (الافتراضي: 1234)" 
+                    class="input-field w-full rounded-2xl py-3.5 px-4 text-center text-lg font-bold tracking-widest"
+                    required
+                >
+                <p id="loginError" class="hidden text-xs font-bold text-red-600">رمز الدخول غير صحيح، حاول مرة أخرى.</p>
+                <button type="submit" class="btn-primary w-full py-3.5 rounded-2xl text-base shadow-md">
+                    دخول لوحة التحكم
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Admin Dashboard -->
+    <div id="adminDashboard" class="hidden pb-20">
+        <!-- Top Header -->
+        <header class="sticky top-0 z-40 bg-[#FDF8F2]/95 backdrop-blur-md border-b border-[#E2CEB5] shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 py-3 flex flex-wrap items-center justify-between gap-3">
+                <div class="flex items-center gap-3">
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <span class="font-luxury text-2xl font-bold text-[#4A2511]">SINA CAFÉ</span>
+                            <span class="text-xs bg-[#C86D2D] text-white px-2.5 py-0.5 rounded-full font-bold">لوحة الإدارة</span>
+                        </div>
+                        <p class="text-xs text-[#6E5343]">إدارة الأصناف والأسعار والأقسام</p>
+                    </div>
+                </div>
+
+                <div class="flex flex-wrap items-center gap-2">
+                    <a href="index.html" target="_blank" class="px-3.5 py-2 rounded-xl border border-[#E2CEB5] bg-[#F3E5D0]/60 text-[#4A2511] hover:border-[#C86D2D] text-xs sm:text-sm font-bold flex items-center gap-1.5">
+                        <span>👁️</span>
+                        <span>معاينة المنيو</span>
+                    </a>
+                    <button onclick="exportStandaloneHTML()" class="btn-accent px-4 py-2 rounded-xl text-xs sm:text-sm flex items-center gap-1.5 shadow-sm">
+                        <span>⬇️</span>
+                        <span>تصدير ملف index.html النهائي</span>
+                    </button>
+                    <button onclick="logout()" class="px-3 py-2 rounded-xl border border-red-300 text-red-700 hover:bg-red-50 text-xs sm:text-sm font-bold">
+                        خروج
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- Stats Summary Bar -->
+        <section class="max-w-7xl mx-auto px-4 pt-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4 mb-6">
+                <div class="admin-card rounded-2xl p-4">
+                    <div class="text-xs text-[#6E5343] font-bold">إجمالي الأقسام</div>
+                    <div id="statCategories" class="text-2xl sm:text-3xl font-black text-[#4A2511] mt-1">0</div>
+                </div>
+                <div class="admin-card rounded-2xl p-4">
+                    <div class="text-xs text-[#6E5343] font-bold">إجمالي الأصناف</div>
+                    <div id="statTotalItems" class="text-2xl sm:text-3xl font-black text-[#4A2511] mt-1">0</div>
+                </div>
+                <div class="admin-card rounded-2xl p-4">
+                    <div class="text-xs text-[#6E5343] font-bold">الأصناف المتاحة</div>
+                    <div id="statActiveItems" class="text-2xl sm:text-3xl font-black text-emerald-700 mt-1">0</div>
+                </div>
+                <div class="admin-card rounded-2xl p-4">
+                    <div class="text-xs text-[#6E5343] font-bold">الأصناف المخفية</div>
+                    <div id="statHiddenItems" class="text-2xl sm:text-3xl font-black text-[#C86D2D] mt-1">0</div>
+                </div>
+            </div>
+
+            <!-- Navigation Tabs -->
+            <div class="flex items-center gap-2 border-b border-[#E2CEB5] pb-3 mb-6 overflow-x-auto">
+                <button onclick="switchTab('items')" id="tab-items" class="tab-btn btn-primary px-5 py-2.5 rounded-2xl text-sm shrink-0">
+                    🍹 الأصناف والأسعار
+                </button>
+                <button onclick="switchTab('categories')" id="tab-categories" class="tab-btn bg-[#FDF8F2] border border-[#E2CEB5] text-[#4A2511] px-5 py-2.5 rounded-2xl text-sm font-bold shrink-0">
+                    📂 الأقسام
+                </button>
+                <button onclick="switchTab('settings')" id="tab-settings" class="tab-btn bg-[#FDF8F2] border border-[#E2CEB5] text-[#4A2511] px-5 py-2.5 rounded-2xl text-sm font-bold shrink-0">
+                    ⚙️ إعدادات الكافيه والنسخ الاحتياطي
+                </button>
+            </div>
+        </section>
+
+        <!-- TAB 1: ITEMS MANAGEMENT -->
+        <section id="panel-items" class="max-w-7xl mx-auto px-4">
+            <div class="admin-card rounded-3xl p-4 sm:p-6 mb-6">
+                <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 mb-5">
+                    <div class="flex flex-col sm:flex-row gap-2.5 flex-grow">
+                        <input 
+                            type="text" 
+                            id="adminSearch" 
+                            oninput="renderAdminItems()" 
+                            placeholder="ابحث بالاسم أو السعر..." 
+                            class="input-field rounded-2xl px-4 py-2.5 text-sm flex-grow max-w-md"
+                        >
+                        <select id="adminCategoryFilter" onchange="renderAdminItems()" class="input-field rounded-2xl px-4 py-2.5 text-sm font-bold text-[#4A2511]">
+                            <option value="all">جميع الأقسام</option>
+                        </select>
+                    </div>
+                    <button onclick="openItemModal()" class="btn-accent px-5 py-2.5 rounded-2xl text-sm flex items-center justify-center gap-2 shadow-sm">
+                        <span>➕</span>
+                        <span>إضافة صنف جديد</span>
+                    </button>
+                </div>
+
+                <!-- Items Table / List -->
+                <div class="overflow-x-auto">
+                    <table class="w-full text-right border-collapse">
+                        <thead>
+                            <tr class="border-b-2 border-[#E2CEB5] text-xs text-[#6E5343] uppercase">
+                                <th class="py-3 px-3">الصنف (عربي / إنجليزي)</th>
+                                <th class="py-3 px-3">القسم</th>
+                                <th class="py-3 px-3">السعر (EGP)</th>
+                                <th class="py-3 px-3">الحالة</th>
+                                <th class="py-3 px-3 text-left">إجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminItemsTableBody" class="divide-y divide-[#E2CEB5]/70 text-sm"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- TAB 2: CATEGORIES MANAGEMENT -->
+        <section id="panel-categories" class="hidden max-w-7xl mx-auto px-4">
+            <div class="admin-card rounded-3xl p-4 sm:p-6">
+                <div class="flex items-center justify-between mb-5">
+                    <div>
+                        <h2 class="text-lg font-extrabold text-[#4A2511]">أقسام المنيو</h2>
+                        <p class="text-xs text-[#6E5343]">يمكنك إضافة أقسام جديدة أو تعديل أسمائها وترتيب ظهورها</p>
+                    </div>
+                    <button onclick="openCategoryModal()" class="btn-accent px-5 py-2.5 rounded-2xl text-sm flex items-center gap-2 shadow-sm">
+                        <span>➕</span>
+                        <span>إضافة قسم جديد</span>
+                    </button>
+                </div>
+
+                <div id="adminCategoriesList" class="grid grid-cols-1 md:grid-cols-2 gap-4"></div>
+            </div>
+        </section>
+
+        <!-- TAB 3: VENUE SETTINGS & BACKUP -->
+        <section id="panel-settings" class="hidden max-w-4xl mx-auto px-4 space-y-6">
+            <!-- Location & Hours Form -->
+            <div class="admin-card rounded-3xl p-5 sm:p-7">
+                <h2 class="text-lg font-extrabold text-[#4A2511] mb-4 border-b border-[#E2CEB5] pb-3">📍 العنوان ومواعيد العمل</h2>
+                <form onsubmit="saveVenueSettings(event)" class="space-y-4 text-sm">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block font-bold text-[#4A2511] mb-1">العنوان (عربي)</label>
+                            <input type="text" id="setLocAr" class="input-field w-full rounded-xl p-2.5" required>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-[#4A2511] mb-1">Address (English)</label>
+                            <input type="text" id="setLocEn" dir="ltr" class="input-field w-full rounded-xl p-2.5" required>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-[#4A2511] mb-1">Адрес (Russian)</label>
+                            <input type="text" id="setLocRu" dir="ltr" class="input-field w-full rounded-xl p-2.5">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-[#4A2511] mb-1">Indirizzo (Italian)</label>
+                            <input type="text" id="setLocIt" dir="ltr" class="input-field w-full rounded-xl p-2.5">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 pt-2 border-t border-[#E2CEB5]">
+                        <div>
+                            <label class="block font-bold text-[#4A2511] mb-1">مواعيد العمل (عربي)</label>
+                            <input type="text" id="setHoursAr" class="input-field w-full rounded-xl p-2.5" required>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-[#4A2511] mb-1">Working Hours (English)</label>
+                            <input type="text" id="setHoursEn" dir="ltr" class="input-field w-full rounded-xl p-2.5" required>
+                        </div>
+                        <div>
+                            <label class="block font-bold text-[#4A2511] mb-1">Часы работы (Russian)</label>
+                            <input type="text" id="setHoursRu" dir="ltr" class="input-field w-full rounded-xl p-2.5">
+                        </div>
+                        <div>
+                            <label class="block font-bold text-[#4A2511] mb-1">Orari (Italian)</label>
+                            <input type="text" id="setHoursIt" dir="ltr" class="input-field w-full rounded-xl p-2.5">
+                        </div>
+                    </div>
+
+                    <div class="pt-2 border-t border-[#E2CEB5] max-w-xs">
+                        <label class="block font-bold text-[#4A2511] mb-1">رمز دخول لوحة التحكم (PIN)</label>
+                        <input type="text" id="setAdminPin" class="input-field w-full rounded-xl p-2.5 font-bold" required>
+                    </div>
+
+                    <div class="pt-3">
+                        <button type="submit" class="btn-primary px-6 py-3 rounded-2xl text-sm shadow-sm">
+                            💾 حفظ الإعدادات
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Backup & Reset -->
+            <div class="admin-card rounded-3xl p-5 sm:p-7">
+                <h2 class="text-lg font-extrabold text-[#4A2511] mb-2">🗄️ النسخ الاحتياطي والاستعادة</h2>
+                <p class="text-xs text-[#6E5343] mb-4">احتفظ بنسخة احتياطية من بيانات المنيو أو استعد البيانات الأساسية.</p>
+                <div class="flex flex-wrap gap-3">
+                    <button onclick="exportJSON()" class="px-4 py-2.5 rounded-2xl border border-[#4A2511] text-[#4A2511] hover:bg-[#4A2511] hover:text-white text-xs sm:text-sm font-bold transition">
+                        📤 تصدير نسخة احتياطية (JSON)
+                    </button>
+                    <label class="px-4 py-2.5 rounded-2xl border border-[#C86D2D] text-[#C86D2D] hover:bg-[#C86D2D] hover:text-white text-xs sm:text-sm font-bold transition cursor-pointer">
+                        📥 استيراد نسخة (JSON)
+                        <input type="file" accept=".json" onchange="importJSON(event)" class="hidden">
+                    </label>
+                    <button onclick="resetToDefaults()" class="px-4 py-2.5 rounded-2xl border border-red-300 text-red-700 hover:bg-red-50 text-xs sm:text-sm font-bold transition">
+                        🔄 استعادة المنيو الافتراضي
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Add / Edit Item Modal -->
+    <div id="itemModal" class="fixed inset-0 z-50 hidden bg-[#2B150A]/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="admin-card rounded-3xl max-w-xl w-full p-6 border-2 border-[#4A2511] max-h-[90vh] overflow-y-auto">
+            <div class="flex items-center justify-between border-b border-[#E2CEB5] pb-3 mb-4">
+                <h3 id="itemModalTitle" class="text-xl font-extrabold text-[#4A2511]">إضافة صنف جديد</h3>
+                <button onclick="closeItemModal()" class="w-8 h-8 rounded-full bg-[#F3E5D0] text-[#4A2511] font-bold">✕</button>
+            </div>
+
+            <form onsubmit="saveItem(event)" class="space-y-4 text-sm">
+                <input type="hidden" id="editItemId">
+                <input type="hidden" id="editItemOldCatId">
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-[#4A2511] mb-1">القسم *</label>
+                        <select id="itemCategorySelect" class="input-field w-full rounded-xl p-2.5 font-bold" required></select>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-[#4A2511] mb-1">السعر (EGP) *</label>
+                        <input type="number" id="itemPriceInput" min="1" step="1" class="input-field w-full rounded-xl p-2.5 font-extrabold text-base" required>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-[#4A2511] mb-1">الاسم بالعربية *</label>
+                        <input type="text" id="itemNameAr" placeholder="مثال: كابتشينو" class="input-field w-full rounded-xl p-2.5" required>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-[#4A2511] mb-1">Name in English *</label>
+                        <input type="text" id="itemNameEn" dir="ltr" placeholder="e.g. Cappuccino" class="input-field w-full rounded-xl p-2.5" required>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-[#6E5343] mb-1">Название (Russian)</label>
+                        <input type="text" id="itemNameRu" dir="ltr" placeholder="اختياري" class="input-field w-full rounded-xl p-2.5">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-[#6E5343] mb-1">Nome (Italian)</label>
+                        <input type="text" id="itemNameIt" dir="ltr" placeholder="اختياري" class="input-field w-full rounded-xl p-2.5">
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2 pt-1">
+                    <input type="checkbox" id="itemAvailableCheck" class="w-4 h-4 accent-[#C86D2D]" checked>
+                    <label for="itemAvailableCheck" class="font-bold text-[#4A2511]">متاح للطلب في المنيو</label>
+                </div>
+
+                <div class="flex gap-2.5 pt-3 border-t border-[#E2CEB5]">
+                    <button type="button" onclick="closeItemModal()" class="w-1/3 py-2.5 rounded-2xl border border-[#E2CEB5] text-[#6E5343] font-bold">إلغاء</button>
+                    <button type="submit" class="w-2/3 py-2.5 rounded-2xl btn-primary shadow-sm">حفظ الصنف</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Add / Edit Category Modal -->
+    <div id="categoryModal" class="fixed inset-0 z-50 hidden bg-[#2B150A]/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="admin-card rounded-3xl max-w-lg w-full p-6 border-2 border-[#4A2511]">
+            <div class="flex items-center justify-between border-b border-[#E2CEB5] pb-3 mb-4">
+                <h3 id="catModalTitle" class="text-xl font-extrabold text-[#4A2511]">إضافة قسم جديد</h3>
+                <button onclick="closeCategoryModal()" class="w-8 h-8 rounded-full bg-[#F3E5D0] text-[#4A2511] font-bold">✕</button>
+            </div>
+
+            <form onsubmit="saveCategory(event)" class="space-y-4 text-sm">
+                <input type="hidden" id="editCatId">
+
+                <div>
+                    <label class="block font-bold text-[#4A2511] mb-1">أيقونة القسم (إيموجي)</label>
+                    <input type="text" id="catIconInput" value="🍹" class="input-field w-24 rounded-xl p-2.5 text-center text-xl" required>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <div>
+                        <label class="block font-bold text-[#4A2511] mb-1">اسم القسم (عربي) *</label>
+                        <input type="text" id="catNameAr" placeholder="مثال: الحلويات" class="input-field w-full rounded-xl p-2.5" required>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-[#4A2511] mb-1">Category (English) *</label>
+                        <input type="text" id="catNameEn" dir="ltr" placeholder="e.g. Desserts" class="input-field w-full rounded-xl p-2.5" required>
+                    </div>
+                    <div>
+                        <label class="block font-bold text-[#6E5343] mb-1">Категория (Russian)</label>
+                        <input type="text" id="catNameRu" dir="ltr" class="input-field w-full rounded-xl p-2.5">
+                    </div>
+                    <div>
+                        <label class="block font-bold text-[#6E5343] mb-1">Categoria (Italian)</label>
+                        <input type="text" id="catNameIt" dir="ltr" class="input-field w-full rounded-xl p-2.5">
+                    </div>
+                </div>
+
+                <div class="flex gap-2.5 pt-3 border-t border-[#E2CEB5]">
+                    <button type="button" onclick="closeCategoryModal()" class="w-1/3 py-2.5 rounded-2xl border border-[#E2CEB5] text-[#6E5343] font-bold">إلغاء</button>
+                    <button type="submit" class="w-2/3 py-2.5 rounded-2xl btn-primary shadow-sm">حفظ القسم</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="fixed bottom-5 left-5 z-50 hidden bg-[#4A2511] text-[#FDF8F2] px-5 py-3 rounded-2xl shadow-xl text-sm font-bold border border-[#C86D2D]"></div>
+
+    <script>
+        const STORAGE_KEY_MENU = 'sinaCafe_menuData_v1';
+        const STORAGE_KEY_SETTINGS = 'sinaCafe_settings_v1';
+        const STORAGE_KEY_PIN = 'sinaCafe_adminPin_v1';
+
+        const defaultVenueSettings = {
+            location: {
+                ar: "طريق السلام، شرم الشيخ - أمام كارفور، بجوار فرع فودافون",
+                en: "El Salam Road, Sharm El Sheikh - In front of Carrefour, next to Vodafone branch",
+                ru: "ул. Эль-Салам, Шарм-эль-Шейх - Перед супермаркетом Carrefour, рядом с отделением Vodafone",
+                it: "El Salam Road, Sharm El Sheikh - Di fronte a Carrefour, vicino alla filiale Vodafone"
+            },
+            hours: {
+                ar: "مفتوح يومياً: 8:00 صباحاً – 3:00 فجراً",
+                en: "Open Daily: 8:00 AM – 3:00 AM",
+                ru: "Открыто ежедневно: с 8:00 до 3:00",
+                it: "Aperto tutti i giorni: 8:00 – 3:00"
+            }
+        };
+
+        const defaultMenuCategories = [
+            {
+                id: "hot-drinks",
+                icon: "☕",
+                title: { ar: "المشروبات الساخنة", en: "Hot Drinks", ru: "Горячие напитки", it: "Bevande Calde" },
+                items: [
+                    { id: "h1", price: 70, available: true, name: { en: "Espresso", ar: "إسبرسو", ru: "Эспрессо", it: "Espresso" } },
+                    { id: "h2", price: 90, available: true, name: { en: "Double Espresso", ar: "دبل إسبريسو", ru: "Двойной эспрессо", it: "Doppio Espresso" } },
+                    { id: "h3", price: 80, available: true, name: { en: "Turkish Coffee", ar: "قهوة تركي", ru: "Турецкий кофе", it: "Caffè Turco" } },
+                    { id: "h4", price: 100, available: true, name: { en: "Cappuccino", ar: "كابتشينو", ru: "Капучино", it: "Cappuccino" } },
+                    { id: "h5", price: 100, available: true, name: { en: "Café Latte", ar: "لاتيه", ru: "Кофе латте", it: "Caffè Latte" } },
+                    { id: "h6", price: 80, available: true, name: { en: "Americano", ar: "أمريكانو", ru: "Американо", it: "Caffè Americano" } },
+                    { id: "h7", price: 100, available: true, name: { en: "Mocha", ar: "موكا", ru: "Мокко", it: "Caffè Mocha" } },
+                    { id: "h8", price: 100, available: true, name: { en: "Hot Chocolate", ar: "شوكولاتة ساخنة", ru: "Горячий шоколад", it: "Cioccolata Calda" } },
+                    { id: "h9", price: 90, available: true, name: { en: "French Coffee", ar: "قهوة فرنسية", ru: "Французский кофе", it: "Caffè Francese" } },
+                    { id: "h10", price: 100, available: true, name: { en: "Hazelnut Coffee", ar: "قهوة بالبندق", ru: "Ореховый кофе", it: "Caffè alla Nocciola" } },
+                    { id: "h11", price: 70, available: true, name: { en: "Green Tea", ar: "شاي أخضر", ru: "Зелёный чай", it: "Tè Verde" } },
+                    { id: "h12", price: 70, available: true, name: { en: "Mint Tea", ar: "شاي بالنعناع", ru: "Мятный чай", it: "Tè alla Menta" } },
+                    { id: "h13", price: 70, available: true, name: { en: "Ginger & Lemon", ar: "جنجر ليمون (زنجبيل بالليمون)", ru: "Имбирь и лимон", it: "Zenzero e Limone" } },
+                    { id: "h14", price: 70, available: true, name: { en: "Hibiscus Tea", ar: "كركديه", ru: "Каркаде", it: "Tè all'Ibisco" } }
+                ]
+            },
+            {
+                id: "cold-drinks",
+                icon: "🧋",
+                title: { ar: "المشروبات الباردة", en: "Cold Drinks", ru: "Холодные напитки", it: "Bevande Fredde" },
+                items: [
+                    { id: "c1", price: 90, available: true, name: { en: "Iced Americano", ar: "آيس أمريكانو", ru: "Айс американо", it: "Americano Freddo" } },
+                    { id: "c2", price: 100, available: true, name: { en: "Iced Latte", ar: "آيس لاتيه", ru: "Айс латте", it: "Latte Freddo" } },
+                    { id: "c3", price: 100, available: true, name: { en: "Iced Mocha", ar: "آيس موكا", ru: "Айс мокко", it: "Mocha Freddo" } },
+                    { id: "c4", price: 110, available: true, name: { en: "Iced Caramel Latte", ar: "آيس كاراميل لاتيه", ru: "Айс карамель латте", it: "Latte Caramello Freddo" } },
+                    { id: "c5", price: 90, available: true, name: { en: "Lemon Mint", ar: "ليمون بالنعناع", ru: "Лимон и мята", it: "Limone e Menta" } },
+                    { id: "c6", price: 100, available: true, name: { en: "Fresh Orange Juice", ar: "عصير برتقال فريش", ru: "Свежевыжатый апельсин", it: "Spremuta d'Arancia" } },
+                    { id: "c7", price: 90, available: true, name: { en: "Fresh Lemon Juice", ar: "عصير ليمون فريش", ru: "Свежевыжатый лимон", it: "Succo di Limone" } },
+                    { id: "c8", price: 120, available: true, name: { en: "Mango Juice", ar: "عصير مانجو", ru: "Манговый сок", it: "Succo di Mango" } },
+                    { id: "c9", price: 110, available: true, name: { en: "Strawberry Juice", ar: "عصير فراولة", ru: "Клубничный сок", it: "Succo di Fragola" } },
+                    { id: "c10", price: 100, available: true, name: { en: "Guava Juice", ar: "عصير جوافة", ru: "Гуавовый сок", it: "Succo di Guava" } },
+                    { id: "c11", price: 100, available: true, name: { en: "Watermelon Juice", ar: "عصير بطيخ", ru: "Арбузный сок", it: "Succo d'Anguria" } },
+                    { id: "c12", price: 120, available: true, name: { en: "Pineapple Juice", ar: "عصير أناناس", ru: "Ананасовый сок", it: "Succo d'Ananas" } },
+                    { id: "c13", price: 50, available: true, name: { en: "Pepsi", ar: "ببسي", ru: "Пепси", it: "Pepsi" } },
+                    { id: "c14", price: 50, available: true, name: { en: "7UP", ar: "سفن أب", ru: "7Up", it: "7Up" } },
+                    { id: "c15", price: 60, available: true, name: { en: "Fayrouz", ar: "فيروز", ru: "Файруз", it: "Fayrouz" } },
+                    { id: "c16", price: 15, available: true, name: { en: "Water", ar: "مياه معدنية", ru: "Вода", it: "Acqua Minerale" } }
+                ]
+            },
+            {
+                id: "smoothies",
+                icon: "🍓",
+                title: { ar: "السموذي", en: "Smoothies", ru: "Смузи", it: "Smoothie" },
+                items: [
+                    { id: "s1", price: 120, available: true, name: { en: "Mango Smoothie", ar: "سموذي مانجو", ru: "Манговый смузи", it: "Smoothie al Mango" } },
+                    { id: "s2", price: 110, available: true, name: { en: "Strawberry Smoothie", ar: "سموذي فراولة", ru: "Клубничный смузи", it: "Smoothie alla Fragola" } },
+                    { id: "s3", price: 130, available: true, name: { en: "Blueberry Smoothie", ar: "سموذي توت أزرق", ru: "Черничный смузи", it: "Smoothie al Mirtillo" } },
+                    { id: "s4", price: 90, available: true, name: { en: "Banana Smoothie", ar: "سموذي موز", ru: "Банановый смузи", it: "Smoothie alla Banana" } },
+                    { id: "s5", price: 120, available: true, name: { en: "Tropical Smoothie", ar: "سموذي استوائي", ru: "Тропический смузи", it: "Smoothie Tropicale" } },
+                    { id: "s6", price: 110, available: true, name: { en: "Strawberry Banana", ar: "فراولة بالموز", ru: "Клубника-банан", it: "Fragola e Banana" } },
+                    { id: "s7", price: 110, available: true, name: { en: "Mango Passion Fruit", ar: "مانجو باشن فروت", ru: "Манго и маракуйя", it: "Mango e Frutto della Passione" } },
+                    { id: "s8", price: 130, available: true, name: { en: "Mixed Berry", ar: "ميكس بري (التوت المشكل)", ru: "Ягодный микс", it: "Frutti di Bosco Misti" } }
+                ]
+            },
+            {
+                id: "soda-mocktails",
+                icon: "🍸",
+                title: { ar: "الصودا والموكتيل", en: "Soda & Mocktails", ru: "Газировка и Моктейли", it: "Soda e Mocktail" },
+                items: [
+                    { id: "m1", price: 100, available: true, name: { en: "Blue Lagoon", ar: "بلو لاجون", ru: "Голубая лагуна", it: "Blue Lagoon" } },
+                    { id: "m2", price: 90, available: true, name: { en: "Mojito Classic", ar: "موهيتو كلاسيك", ru: "Классический мохито", it: "Mojito Classico" } },
+                    { id: "m3", price: 100, available: true, name: { en: "Strawberry Mojito", ar: "موهيتو فراولة", ru: "Клубничный мохито", it: "Mojito alla Fragola" } },
+                    { id: "m4", price: 100, available: true, name: { en: "Blueberry Mojito", ar: "موهيتو توت أزرق", ru: "Черничный мохито", it: "Mojito al Mirtillo" } },
+                    { id: "m5", price: 100, available: true, name: { en: "Passion Fruit Mojito", ar: "موهيتو باشن فروت", ru: "Мохито маракуйя", it: "Mojito al Frutto della Passione" } },
+                    { id: "m6", price: 90, available: true, name: { en: "Green Apple Soda", ar: "صودا تفاح أخضر", ru: "Зеленое яблоко сода", it: "Soda Mela Verde" } },
+                    { id: "m7", price: 90, available: true, name: { en: "Strawberry Soda", ar: "صودا فراولة", ru: "Клубничная сода", it: "Soda alla Fragola" } },
+                    { id: "m8", price: 100, available: true, name: { en: "Blueberry Soda", ar: "صودا توت أزرق", ru: "Черничная сода", it: "Soda al Mirtillo" } },
+                    { id: "m9", price: 80, available: true, name: { en: "Lemon Soda", ar: "صودا ليمون", ru: "Лимонная сода", it: "Soda al Limone" } },
+                    { id: "m10", price: 100, available: true, name: { en: "Italian Soda", ar: "صودا إيطالية", ru: "Итальянская сода", it: "Soda Italiana" } }
+                ]
+            },
+            {
+                id: "energy-drinks",
+                icon: "⚡",
+                title: { ar: "مشروبات الطاقة", en: "Energy Drinks", ru: "Энергетические напитки", it: "Energy Drink" },
+                items: [
+                    { id: "e1", price: 120, available: true, name: { en: "Red Bull", ar: "ريد بول", ru: "Ред Булл", it: "Red Bull" } },
+                    { id: "e2", price: 150, available: true, name: { en: "Red Bull Mojito", ar: "ريد بول موهيتو", ru: "Ред Булл Мохито", it: "Red Bull Mojito" } },
+                    { id: "e3", price: 150, available: true, name: { en: "Red Bull Blueberry", ar: "ريد بول توت أزرق", ru: "Ред Булл Черника", it: "Red Bull Mirtillo" } },
+                    { id: "e4", price: 150, available: true, name: { en: "Red Bull Strawberry", ar: "ريد بول فراولة", ru: "Ред Булл Клубника", it: "Red Bull Fragola" } },
+                    { id: "e5", price: 150, available: true, name: { en: "Red Bull Tropical", ar: "ريد بول استوائي", ru: "Ред Булл Тропик", it: "Red Bull Tropical" } },
+                    { id: "e6", price: 130, available: true, name: { en: "Monster Energy", ar: "مونستر إنرجي", ru: "Монстр Энерджи", it: "Monster Energy" } }
+                ]
+            },
+            {
+                id: "shisha",
+                icon: "💨",
+                title: { ar: "الشيشة", en: "Shisha", ru: "Кальян", it: "Shisha (Narghilè)" },
+                items: [
+                    { id: "sh1", price: 150, available: true, name: { en: "Double Apple", ar: "تفاحتين / تفاح مزدوج", ru: "Двойное яблоко", it: "Doppia Mela" } },
+                    { id: "sh2", price: 170, available: true, name: { en: "Blueberry", ar: "توت", ru: "Черника", it: "Mirtillo" } },
+                    { id: "sh3", price: 160, available: true, name: { en: "Grape Mint", ar: "عنب بالنعناع", ru: "Виноград и мята", it: "Uva e Menta" } },
+                    { id: "sh4", price: 160, available: true, name: { en: "Watermelon Mint", ar: "بطيخ بالنعناع", ru: "Арбуз и мята", it: "Anguria e Menta" } },
+                    { id: "sh5", price: 150, available: true, name: { en: "Lemon Mint", ar: "ليمون بالنعناع", ru: "Лимон и мята", it: "Limone e Menta" } },
+                    { id: "sh6", price: 200, available: true, name: { en: "Love 66", ar: "لاف 66", ru: "Лав 66", it: "Love 66" } },
+                    { id: "sh7", price: 200, available: true, name: { en: "Lady Killer", ar: "ليدي كيلر", ru: "Леди Киллер", it: "Lady Killer" } },
+                    { id: "sh8", price: 150, available: true, name: { en: "Gum Mint", ar: "علكة بالنعناع (لبان بالنعناع)", ru: "Жвачка и мята", it: "Gomma e Menta" } },
+                    { id: "sh9", price: 160, available: true, name: { en: "Peach", ar: "خوخ", ru: "Персик", it: "Pesca" } },
+                    { id: "sh10", price: 200, available: true, name: { en: "Mixed Flavors", ar: "ميكس نكهات", ru: "Микс вкусов", it: "Gusti Misti" } }
+                ]
+            }
+        ];
+
+        let menuCategories = JSON.parse(localStorage.getItem(STORAGE_KEY_MENU)) || JSON.parse(JSON.stringify(defaultMenuCategories));
+        let venueSettings = JSON.parse(localStorage.getItem(STORAGE_KEY_SETTINGS)) || JSON.parse(JSON.stringify(defaultVenueSettings));
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 2800);
+        }
+
+        function persistAll() {
+            localStorage.setItem(STORAGE_KEY_MENU, JSON.stringify(menuCategories));
+            localStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify(venueSettings));
+            updateStats();
+        }
+
+        // Authentication
+        function handleLogin(e) {
+            e.preventDefault();
+            const entered = document.getElementById('pinInput').value;
+            const currentPin = localStorage.getItem(STORAGE_KEY_PIN) || '1234';
+            if (entered === currentPin) {
+                sessionStorage.setItem('sinaCafe_auth', 'true');
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('adminDashboard').classList.remove('hidden');
+                initAdmin();
+            } else {
+                document.getElementById('loginError').classList.remove('hidden');
+            }
+        }
+
+        function logout() {
+            sessionStorage.removeItem('sinaCafe_auth');
+            location.reload();
+        }
+
+        function switchTab(tab) {
+            ['items', 'categories', 'settings'].forEach(t => {
+                document.getElementById(`panel-${t}`).classList.add('hidden');
+                const btn = document.getElementById(`tab-${t}`);
+                btn.classList.remove('btn-primary');
+                btn.classList.add('bg-[#FDF8F2]', 'border', 'border-[#E2CEB5]', 'text-[#4A2511]');
+            });
+            document.getElementById(`panel-${tab}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`tab-${tab}`);
+            activeBtn.classList.add('btn-primary');
+            activeBtn.classList.remove('bg-[#FDF8F2]', 'border', 'border-[#E2CEB5]', 'text-[#4A2511]');
+        }
+
+        function updateStats() {
+            let total = 0;
+            let active = 0;
+            let hidden = 0;
+            menuCategories.forEach(c => {
+                c.items.forEach(i => {
+                    total++;
+                    if (i.available === false) hidden++;
+                    else active++;
+                });
+            });
+            document.getElementById('statCategories').textContent = menuCategories.length;
+            document.getElementById('statTotalItems').textContent = total;
+            document.getElementById('statActiveItems').textContent = active;
+            document.getElementById('statHiddenItems').textContent = hidden;
+        }
+
+        function populateCategoryDropdowns() {
+            const filterSel = document.getElementById('adminCategoryFilter');
+            const modalSel = document.getElementById('itemCategorySelect');
+            const currentFilter = filterSel.value;
+
+            filterSel.innerHTML = `<option value="all">جميع الأقسام (${menuCategories.length})</option>`;
+            modalSel.innerHTML = '';
+
+            menuCategories.forEach(cat => {
+                filterSel.innerHTML += `<option value="${cat.id}">${cat.icon} ${cat.title.ar}</option>`;
+                modalSel.innerHTML += `<option value="${cat.id}">${cat.icon} ${cat.title.ar}</option>`;
+            });
+
+            if ([...filterSel.options].some(o => o.value === currentFilter)) {
+                filterSel.value = currentFilter;
+            }
+        }
+
+        // Render Items Table
+        function renderAdminItems() {
+            const tbody = document.getElementById('adminItemsTableBody');
+            const search = document.getElementById('adminSearch').value.trim().toLowerCase();
+            const catFilter = document.getElementById('adminCategoryFilter').value;
+            let rowsHtml = '';
+
+            menuCategories.forEach(cat => {
+                if (catFilter !== 'all' && catFilter !== cat.id) return;
+
+                cat.items.forEach(item => {
+                    const matchSearch = !search ||
+                        (item.name.ar || '').toLowerCase().includes(search) ||
+                        (item.name.en || '').toLowerCase().includes(search) ||
+                        String(item.price).includes(search);
+
+                    if (!matchSearch) return;
+
+                    const isAvail = item.available !== false;
+                    rowsHtml += `
+                        <tr class="hover:bg-[#F3E5D0]/35 transition-colors ${!isAvail ? 'opacity-60' : ''}">
+                            <td class="py-3 px-3">
+                                <div class="font-bold text-[#2B150A]">${item.name.ar}</div>
+                                <div class="text-xs text-[#6E5343]">${item.name.en}</div>
+                            </td>
+                            <td class="py-3 px-3">
+                                <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-xl bg-[#F3E5D0]/70 border border-[#E2CEB5] text-xs font-bold text-[#4A2511]">
+                                    ${cat.icon} ${cat.title.ar}
+                                </span>
+                            </td>
+                            <td class="py-3 px-3">
+                                <div class="flex items-center gap-1">
+                                    <input 
+                                        type="number" 
+                                        value="${item.price}" 
+                                        onchange="quickPriceUpdate('${cat.id}', '${item.id}', this.value)"
+                                        class="input-field w-20 rounded-xl px-2.5 py-1 font-extrabold text-[#4A2511] text-center"
+                                    >
+                                    <span class="text-xs font-bold text-[#C86D2D]">EGP</span>
+                                </div>
+                            </td>
+                            <td class="py-3 px-3">
+                                <button onclick="toggleItemAvailability('${cat.id}', '${item.id}')" class="px-3 py-1 rounded-full text-xs font-bold border transition ${isAvail ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 'bg-amber-50 text-[#C86D2D] border-[#C86D2D]/30'}">
+                                    ${isAvail ? '✅ متاح' : '🚫 مخفي'}
+                                </button>
+                            </td>
+                            <td class="py-3 px-3 text-left">
+                                <div class="inline-flex items-center gap-1.5">
+                                    <button onclick="openItemModal('${cat.id}', '${item.id}')" class="px-3 py-1.5 rounded-xl bg-[#F3E5D0] text-[#4A2511] hover:bg-[#C86D2D] hover:text-white text-xs font-bold transition">
+                                        ✏️ تعديل
+                                    </button>
+                                    <button onclick="deleteItem('${cat.id}', '${item.id}')" class="px-2.5 py-1.5 rounded-xl bg-red-50 text-red-600 hover:bg-red-600 hover:text-white text-xs font-bold transition">
+                                        🗑️
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                    `;
+                });
+            });
+
+            tbody.innerHTML = rowsHtml || `<tr><td colspan="5" class="text-center py-10 text-[#6E5343] font-bold">لا توجد أصناف مطابقة للبحث</td></tr>`;
+        }
+
+        function quickPriceUpdate(catId, itemId, newPrice) {
+            const val = parseFloat(newPrice);
+            if (isNaN(val) || val < 0) return;
+            const cat = menuCategories.find(c => c.id === catId);
+            const item = cat?.items.find(i => i.id === itemId);
+            if (item) {
+                item.price = val;
+                persistAll();
+                showToast('تم تحديث السعر فوراً ✓');
+            }
+        }
+
+        function toggleItemAvailability(catId, itemId) {
+            const cat = menuCategories.find(c => c.id === catId);
+            const item = cat?.items.find(i => i.id === itemId);
+            if (item) {
+                item.available = item.available === false ? true : false;
+                persistAll();
+                renderAdminItems();
+                showToast(item.available ? 'تم إظهار الصنف في المنيو' : 'تم إخفاء الصنف مؤقتاً');
+            }
+        }
+
+        function openItemModal(catId = null, itemId = null) {
+            populateCategoryDropdowns();
+            const modal = document.getElementById('itemModal');
+            if (catId && itemId) {
+                const cat = menuCategories.find(c => c.id === catId);
+                const item = cat?.items.find(i => i.id === itemId);
+                if (!item) return;
+                document.getElementById('itemModalTitle').textContent = 'تعديل الصنف';
+                document.getElementById('editItemId').value = item.id;
+                document.getElementById('editItemOldCatId').value = catId;
+                document.getElementById('itemCategorySelect').value = catId;
+                document.getElementById('itemPriceInput').value = item.price;
+                document.getElementById('itemNameAr').value = item.name.ar || '';
+                document.getElementById('itemNameEn').value = item.name.en || '';
+                document.getElementById('itemNameRu').value = item.name.ru || '';
+                document.getElementById('itemNameIt').value = item.name.it || '';
+                document.getElementById('itemAvailableCheck').checked = item.available !== false;
+            } else {
+                document.getElementById('itemModalTitle').textContent = 'إضافة صنف جديد';
+                document.getElementById('editItemId').value = '';
+                document.getElementById('editItemOldCatId').value = '';
+                document.getElementById('itemPriceInput').value = '';
+                document.getElementById('itemNameAr').value = '';
+                document.getElementById('itemNameEn').value = '';
+                document.getElementById('itemNameRu').value = '';
+                document.getElementById('itemNameIt').value = '';
+                document.getElementById('itemAvailableCheck').checked = true;
+            }
+            modal.classList.remove('hidden');
+        }
+
+        function closeItemModal() {
+            document.getElementById('itemModal').classList.add('hidden');
+        }
+
+        function saveItem(e) {
+            e.preventDefault();
+            const editId = document.getElementById('editItemId').value;
+            const oldCatId = document.getElementById('editItemOldCatId').value;
+            const targetCatId = document.getElementById('itemCategorySelect').value;
+            const price = parseFloat(document.getElementById('itemPriceInput').value);
+            const nameAr = document.getElementById('itemNameAr').value.trim();
+            const nameEn = document.getElementById('itemNameEn').value.trim();
+            const nameRu = document.getElementById('itemNameRu').value.trim() || nameEn;
+            const nameIt = document.getElementById('itemNameIt').value.trim() || nameEn;
+            const available = document.getElementById('itemAvailableCheck').checked;
+
+            const itemObj = {
+                id: editId || ('item_' + Date.now()),
+                price,
+                available,
+                name: { ar: nameAr, en: nameEn, ru: nameRu, it: nameIt }
+            };
+
+            if (editId && oldCatId) {
+                const oldCat = menuCategories.find(c => c.id === oldCatId);
+                if (oldCat) {
+                    const idx = oldCat.items.findIndex(i => i.id === editId);
+                    if (idx !== -1) {
+                        if (oldCatId === targetCatId) {
+                            oldCat.items[idx] = itemObj;
+                        } else {
+                            oldCat.items.splice(idx, 1);
+                            const newCat = menuCategories.find(c => c.id === targetCatId);
+                            newCat?.items.push(itemObj);
+                        }
+                    }
+                }
+            } else {
+                const targetCat = menuCategories.find(c => c.id === targetCatId);
+                targetCat?.items.push(itemObj);
+            }
+
+            persistAll();
+            renderAdminItems();
+            renderAdminCategories();
+            closeItemModal();
+            showToast('تم حفظ الصنف بنجاح ✓');
+        }
+
+        function deleteItem(catId, itemId) {
+            if (!confirm('هل أنت متأكد من حذف هذا الصنف نهائياً؟')) return;
+            const cat = menuCategories.find(c => c.id === catId);
+            if (cat) {
+                cat.items = cat.items.filter(i => i.id !== itemId);
+                persistAll();
+                renderAdminItems();
+                renderAdminCategories();
+                showToast('تم حذف الصنف');
+            }
+        }
+
+        // Categories Management
+        function renderAdminCategories() {
+            const container = document.getElementById('adminCategoriesList');
+            let html = '';
+            menuCategories.forEach((cat, index) => {
+                html += `
+                    <div class="bg-[#F3E5D0]/50 border border-[#E2CEB5] rounded-2xl p-4 flex items-center justify-between gap-3">
+                        <div class="flex items-center gap-3">
+                            <span class="w-12 h-12 rounded-2xl bg-[#FDF8F2] border border-[#C86D2D]/40 flex items-center justify-center text-2xl">${cat.icon}</span>
+                            <div>
+                                <div class="font-extrabold text-[#4A2511] text-base">${cat.title.ar}</div>
+                                <div class="text-xs text-[#6E5343]">${cat.title.en} • <span class="font-bold text-[#C86D2D]">${cat.items.length} صنف</span></div>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-1.5">
+                            <button onclick="moveCategory(${index}, -1)" ${index === 0 ? 'disabled' : ''} class="w-8 h-8 rounded-xl bg-[#FDF8F2] border border-[#E2CEB5] text-xs font-bold disabled:opacity-30">▲</button>
+                            <button onclick="moveCategory(${index}, 1)" ${index === menuCategories.length - 1 ? 'disabled' : ''} class="w-8 h-8 rounded-xl bg-[#FDF8F2] border border-[#E2CEB5] text-xs font-bold disabled:opacity-30">▼</button>
+                            <button onclick="openCategoryModal('${cat.id}')" class="px-3 py-1.5 rounded-xl bg-[#FDF8F2] border border-[#E2CEB5] text-[#4A2511] hover:border-[#C86D2D] text-xs font-bold">تعديل</button>
+                            <button onclick="deleteCategory('${cat.id}')" class="px-2.5 py-1.5 rounded-xl bg-red-50 text-red-600 text-xs font-bold">🗑️</button>
+                        </div>
+                    </div>
+                `;
+            });
+            container.innerHTML = html;
+        }
+
+        function moveCategory(index, dir) {
+            const newIndex = index + dir;
+            if (newIndex < 0 || newIndex >= menuCategories.length) return;
+            const temp = menuCategories[index];
+            menuCategories[index] = menuCategories[newIndex];
+            menuCategories[newIndex] = temp;
+            persistAll();
+            populateCategoryDropdowns();
+            renderAdminCategories();
+            renderAdminItems();
+        }
+
+        function openCategoryModal(catId = null) {
+            const modal = document.getElementById('categoryModal');
+            if (catId) {
+                const cat = menuCategories.find(c => c.id === catId);
+                if (!cat) return;
+                document.getElementById('catModalTitle').textContent = 'تعديل القسم';
+                document.getElementById('editCatId').value = cat.id;
+                document.getElementById('catIconInput').value = cat.icon;
+                document.getElementById('catNameAr').value = cat.title.ar || '';
+                document.getElementById('catNameEn').value = cat.title.en || '';
+                document.getElementById('catNameRu').value = cat.title.ru || '';
+                document.getElementById('catNameIt').value = cat.title.it || '';
+            } else {
+                document.getElementById('catModalTitle').textContent = 'إضافة قسم جديد';
+                document.getElementById('editCatId').value = '';
+                document.getElementById('catIconInput').value = '🍹';
+                document.getElementById('catNameAr').value = '';
+                document.getElementById('catNameEn').value = '';
+                document.getElementById('catNameRu').value = '';
+                document.getElementById('catNameIt').value = '';
+            }
+            modal.classList.remove('hidden');
+        }
+
+        function closeCategoryModal() {
+            document.getElementById('categoryModal').classList.add('hidden');
+        }
+
+        function saveCategory(e) {
+            e.preventDefault();
+            const editId = document.getElementById('editCatId').value;
+            const icon = document.getElementById('catIconInput').value.trim() || '🍹';
+            const ar = document.getElementById('catNameAr').value.trim();
+            const en = document.getElementById('catNameEn').value.trim();
+            const ru = document.getElementById('catNameRu').value.trim() || en;
+            const it = document.getElementById('catNameIt').value.trim() || en;
+
+            if (editId) {
+                const cat = menuCategories.find(c => c.id === editId);
+                if (cat) {
+                    cat.icon = icon;
+                    cat.title = { ar, en, ru, it };
+                }
+            } else {
+                menuCategories.push({
+                    id: 'cat_' + Date.now(),
+                    icon,
+                    title: { ar, en, ru, it },
+                    items: []
+                });
+            }
+
+            persistAll();
+            populateCategoryDropdowns();
+            renderAdminCategories();
+            renderAdminItems();
+            closeCategoryModal();
+            showToast('تم حفظ القسم بنجاح ✓');
+        }
+
+        function deleteCategory(catId) {
+            const cat = menuCategories.find(c => c.id === catId);
+            if (!cat) return;
+            if (!confirm(`حذف قسم "${cat.title.ar}" سيحذف جميع الأصناف بداخله (${cat.items.length} صنف). هل تريد المتابعة؟`)) return;
+            menuCategories = menuCategories.filter(c => c.id !== catId);
+            persistAll();
+            populateCategoryDropdowns();
+            renderAdminCategories();
+            renderAdminItems();
+            showToast('تم حذف القسم');
+        }
+
+        // Settings Management
+        function loadSettingsForm() {
+            document.getElementById('setLocAr').value = venueSettings.location.ar || '';
+            document.getElementById('setLocEn').value = venueSettings.location.en || '';
+            document.getElementById('setLocRu').value = venueSettings.location.ru || '';
+            document.getElementById('setLocIt').value = venueSettings.location.it || '';
+
+            document.getElementById('setHoursAr').value = venueSettings.hours.ar || '';
+            document.getElementById('setHoursEn').value = venueSettings.hours.en || '';
+            document.getElementById('setHoursRu').value = venueSettings.hours.ru || '';
+            document.getElementById('setHoursIt').value = venueSettings.hours.it || '';
+
+            document.getElementById('setAdminPin').value = localStorage.getItem(STORAGE_KEY_PIN) || '1234';
+        }
+
+        function saveVenueSettings(e) {
+            e.preventDefault();
+            venueSettings.location = {
+                ar: document.getElementById('setLocAr').value.trim(),
+                en: document.getElementById('setLocEn').value.trim(),
+                ru: document.getElementById('setLocRu').value.trim() || document.getElementById('setLocEn').value.trim(),
+                it: document.getElementById('setLocIt').value.trim() || document.getElementById('setLocEn').value.trim()
+            };
+            venueSettings.hours = {
+                ar: document.getElementById('setHoursAr').value.trim(),
+                en: document.getElementById('setHoursEn').value.trim(),
+                ru: document.getElementById('setHoursRu').value.trim() || document.getElementById('setHoursEn').value.trim(),
+                it: document.getElementById('setHoursIt').value.trim() || document.getElementById('setHoursEn').value.trim()
+            };
+            const newPin = document.getElementById('setAdminPin').value.trim();
+            if (newPin) localStorage.setItem(STORAGE_KEY_PIN, newPin);
+
+            persistAll();
+            showToast('تم حفظ إعدادات الكافيه بنجاح ✓');
+        }
+
+        // Backup & Export
+        function exportJSON() {
+            const payload = { settings: venueSettings, categories: menuCategories };
+            const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `sina-cafe-backup-${new Date().toISOString().slice(0,10)}.json`;
+            a.click();
+        }
+
+        function importJSON(e) {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = function(evt) {
+                try {
+                    const data = JSON.parse(evt.target.result);
+                    if (data.categories && Array.isArray(data.categories)) {
+                        menuCategories = data.categories;
+                        if (data.settings) venueSettings = data.settings;
+                        persistAll();
+                        initAdmin();
+                        showToast('تم استيراد البيانات بنجاح ✓');
+                    }
+                } catch (err) {
+                    alert('ملف غير صالح.');
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function resetToDefaults() {
+            if (!confirm('هل تريد استعادة المنيو والأسعار الافتراضية؟ سيتم مسح التعديلات الحالية.')) return;
+            menuCategories = JSON.parse(JSON.stringify(defaultMenuCategories));
+            venueSettings = JSON.parse(JSON.stringify(defaultVenueSettings));
+            persistAll();
+            initAdmin();
+            showToast('تمت استعادة البيانات الافتراضية');
+        }
+
+        // Generate Standalone index.html with all edits baked in
+        function exportStandaloneHTML() {
+            const htmlContent = `<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sina Café - Sharm El Sheikh | Digital Menu</title>
+    <script src="https://cdn.tailwindcss.com"><\/script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@400;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-main: #F3E5D0;
+            --bg-card: #FDF8F2;
+            --color-primary: #4A2511;
+            --color-accent: #C86D2D;
+            --text-main: #2B150A;
+            --text-muted: #6E5343;
+            --border-subtle: #E2CEB5;
+        }
+        body {
+            background-color: var(--bg-main);
+            background-image: 
+                radial-gradient(circle at 12% 8%, rgba(200, 109, 45, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 88% 92%, rgba(74, 37, 17, 0.06) 0%, transparent 45%);
+            color: var(--text-main);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        html[lang="ar"] body { font-family: 'Cairo', sans-serif; }
+        html:not([lang="ar"]) body { font-family: 'Montserrat', sans-serif; }
+        .font-luxury { font-family: 'Cormorant Garamond', 'Amiri', serif; }
+        .brand-title-text { color: var(--color-primary); text-shadow: 0 2px 12px rgba(200, 109, 45, 0.22); }
+        .primary-gradient-text { background: linear-gradient(135deg, #4A2511 0%, #7C3D1D 55%, #C86D2D 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .menu-card { background-color: var(--bg-card); border: 1.5px solid var(--border-subtle); box-shadow: 0 10px 28px -6px rgba(74, 37, 17, 0.09), 0 2px 6px -1px rgba(74, 37, 17, 0.05); position: relative; transition: all 0.25s ease; }
+        .menu-card:hover { border-color: var(--color-accent); box-shadow: 0 14px 34px -6px rgba(74, 37, 17, 0.14), 0 4px 12px -2px rgba(200, 109, 45, 0.12); }
+        .leader-dots { flex-grow: 1; border-bottom: 1.5px dotted var(--border-subtle); margin: 0 10px; position: relative; top: -4px; }
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-main); }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(180deg, var(--color-accent), var(--color-primary)); border-radius: 9999px; }
+        .btn-active { background: linear-gradient(135deg, var(--color-primary) 0%, #633319 100%); color: var(--bg-card) !important; font-weight: 700; box-shadow: 0 4px 14px rgba(74, 37, 17, 0.25); border-color: transparent !important; }
+        .btn-accent { background: linear-gradient(135deg, var(--color-accent) 0%, #B05A1E 100%); color: #FFFFFF !important; font-weight: 700; box-shadow: 0 4px 14px rgba(200, 109, 45, 0.3); }
+        .menu-item-row { transition: background 0.2s ease, transform 0.1s ease; }
+        .menu-item-row:hover { background: rgba(200, 109, 45, 0.07); }
+        .menu-item-row:active { transform: scale(0.99); }
+    </style>
+</head>
+<body class="pb-32 selection:bg-[#C86D2D] selection:text-white">
+    <div class="sticky top-0 z-40 backdrop-blur-md bg-[#FDF8F2]/92 border-b border-[#E2CEB5] shadow-sm">
+        <div class="max-w-6xl mx-auto px-3 py-2.5 flex flex-wrap items-center justify-between gap-2">
+            <div class="flex items-center">
+                <span id="navBrand" class="font-luxury text-xl font-bold text-[#4A2511] tracking-wide">SINA CAFÉ</span>
+            </div>
+            <div class="flex items-center gap-1.5 overflow-x-auto py-0.5">
+                <button onclick="setLanguage('ar')" id="lang-ar" class="lang-btn px-3 py-1.5 rounded-full text-xs font-semibold border border-[#E2CEB5] bg-[#FDF8F2] text-[#4A2511] hover:border-[#C86D2D] transition-all flex items-center gap-1"><span>🇪🇬</span> <span>عربي</span></button>
+                <button onclick="setLanguage('en')" id="lang-en" class="lang-btn px-3 py-1.5 rounded-full text-xs font-semibold border border-[#E2CEB5] bg-[#FDF8F2] text-[#4A2511] hover:border-[#C86D2D] transition-all flex items-center gap-1"><span>🇬🇧</span> <span>EN</span></button>
+                <button onclick="setLanguage('ru')" id="lang-ru" class="lang-btn px-3 py-1.5 rounded-full text-xs font-semibold border border-[#E2CEB5] bg-[#FDF8F2] text-[#4A2511] hover:border-[#C86D2D] transition-all flex items-center gap-1"><span>🇷🇺</span> <span>RU</span></button>
+                <button onclick="setLanguage('it')" id="lang-it" class="lang-btn px-3 py-1.5 rounded-full text-xs font-semibold border border-[#E2CEB5] bg-[#FDF8F2] text-[#4A2511] hover:border-[#C86D2D] transition-all flex items-center gap-1"><span>🇮🇹</span> <span>IT</span></button>
+            </div>
+        </div>
+    </div>
+
+    <header class="relative overflow-hidden pt-8 pb-6 px-4 text-center border-b border-[#E2CEB5]">
+        <div class="absolute inset-0 pointer-events-none flex justify-center items-center opacity-25">
+            <div class="w-[500px] h-[280px] rounded-full bg-gradient-to-r from-[#C86D2D]/40 via-[#E2CEB5] to-[#4A2511]/20 blur-[100px]"></div>
+        </div>
+        <div class="max-w-4xl mx-auto relative z-10">
+            <h1 id="heroTitle" class="font-luxury text-6xl sm:text-7xl md:text-8xl font-black brand-title-text tracking-wider uppercase mb-1">Sina Café</h1>
+            <div class="flex items-center justify-center gap-3 my-2">
+                <span class="h-[1.5px] w-16 sm:w-28 bg-gradient-to-r from-transparent via-[#C86D2D] to-[#4A2511]"></span>
+                <p id="heroSubtitle" class="font-luxury text-xl sm:text-2xl text-[#C86D2D] font-bold tracking-widest uppercase">Sharm El Sheikh</p>
+                <span class="h-[1.5px] w-16 sm:w-28 bg-gradient-to-l from-transparent via-[#C86D2D] to-[#4A2511]"></span>
+            </div>
+            <p id="heroSlogan" class="text-[#6E5343] italic text-sm sm:text-base mt-2 font-luxury tracking-wider">"Good Drinks... Great Moments..."</p>
+        </div>
+    </header>
+
+    <section class="max-w-6xl mx-auto px-4 pt-6 pb-2">
+        <div class="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between mb-5">
+            <div class="relative flex-grow max-w-xl">
+                <input type="text" id="searchInput" oninput="handleSearch(this.value)" placeholder="ابحث عن مشروبك المفضل..." class="w-full bg-[#FDF8F2] text-[#2B150A] placeholder-[#6E5343]/70 border border-[#E2CEB5] focus:border-[#C86D2D] rounded-2xl py-3 px-11 outline-none transition-all shadow-sm text-sm sm:text-base">
+                <svg class="w-5 h-5 text-[#C86D2D] absolute top-3.5 right-3.5 rtl:right-3.5 ltr:left-3.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path></svg>
+                <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute top-3 left-3.5 rtl:left-3.5 ltr:right-3.5 text-[#6E5343] hover:text-[#4A2511] text-sm font-bold">✕</button>
+            </div>
+            <div class="text-xs sm:text-sm text-[#4A2511] bg-[#FDF8F2] border border-[#E2CEB5] rounded-2xl px-4 py-2.5 flex items-center gap-2 self-start sm:self-auto shadow-sm">
+                <span>✨</span>
+                <span id="tapToCalcHint">اضغط على أي صنف لإضافته لحاسبة الطلبات وتسهيل طلبك</span>
+            </div>
+        </div>
+        <div id="categoryTabs" class="flex items-center gap-2 overflow-x-auto pb-3 pt-1 no-scrollbar"></div>
+    </section>
+
+    <main class="max-w-6xl mx-auto px-4 py-4">
+        <div id="menuGrid" class="grid grid-cols-1 lg:grid-cols-2 gap-6"></div>
+        <div id="emptyState" class="hidden text-center py-16 menu-card rounded-3xl p-8 max-w-md mx-auto my-6">
+            <div class="text-4xl mb-3">🍹</div>
+            <h3 id="emptyStateTitle" class="text-xl font-bold text-[#4A2511] mb-1">لا توجد نتائج مطابقة</h3>
+            <p id="emptyStateDesc" class="text-sm text-[#6E5343] mb-4">جرب البحث بكلمة أخرى أو استعرض جميع الأقسام</p>
+            <button onclick="resetFilters()" id="resetFilterBtn" class="px-5 py-2.5 rounded-full btn-active text-sm">عرض كل المنيو</button>
+        </div>
+    </main>
+
+    <footer class="max-w-6xl mx-auto px-4 mt-12 mb-10">
+        <div class="menu-card rounded-3xl p-6 sm:p-8 border border-[#E2CEB5] relative overflow-hidden">
+            <div class="text-center mb-6">
+                <p id="footerSlogan" class="font-luxury text-2xl sm:text-3xl italic primary-gradient-text font-bold">"Good Drinks... Great Moments..."</p>
+                <div class="w-48 h-[1.5px] bg-gradient-to-r from-transparent via-[#C86D2D] to-transparent mx-auto mt-3"></div>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5 items-center text-sm sm:text-base">
+                <div class="flex items-start sm:items-center gap-3.5 bg-[#F3E5D0]/60 p-4 rounded-2xl border border-[#E2CEB5]">
+                    <div class="w-11 h-11 rounded-2xl bg-[#FDF8F2] border border-[#C86D2D]/40 flex items-center justify-center shrink-0 text-[#C86D2D] text-xl shadow-sm">📍</div>
+                    <div>
+                        <div id="locationLabel" class="text-xs text-[#C86D2D] font-bold uppercase tracking-wider">العنوان / Location</div>
+                        <div id="locationText" class="text-[#2B150A] font-semibold mt-0.5">${venueSettings.location.ar}</div>
+                    </div>
+                </div>
+                <div class="flex items-start sm:items-center gap-3.5 bg-[#F3E5D0]/60 p-4 rounded-2xl border border-[#E2CEB5]">
+                    <div class="w-11 h-11 rounded-2xl bg-[#FDF8F2] border border-[#C86D2D]/40 flex items-center justify-center shrink-0 text-[#C86D2D] text-xl shadow-sm">🕒</div>
+                    <div>
+                        <div id="hoursLabel" class="text-xs text-[#C86D2D] font-bold uppercase tracking-wider">مواعيد العمل / Hours</div>
+                        <div id="hoursText" class="text-[#2B150A] font-semibold mt-0.5">${venueSettings.hours.ar}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <div id="orderTrayBar" class="fixed bottom-0 inset-x-0 z-50 transform translate-y-full transition-transform duration-300">
+        <div class="max-w-4xl mx-auto px-3 pb-4">
+            <div class="bg-[#FDF8F2]/95 backdrop-blur-xl border-2 border-[#4A2511] rounded-3xl p-3.5 sm:p-4 shadow-[0_-10px_30px_rgba(74,37,17,0.18)] flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3.5">
+                    <div class="relative">
+                        <span class="w-12 h-12 rounded-2xl btn-active flex items-center justify-center text-2xl shadow-md">🧾</span>
+                        <span id="trayCountBadge" class="absolute -top-2 -right-2 bg-[#C86D2D] text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-[#FDF8F2]">0</span>
+                    </div>
+                    <div>
+                        <div id="trayTotalLabel" class="text-xs text-[#6E5343] font-semibold">إجمالي الطلبات المختارة</div>
+                        <div class="text-lg sm:text-2xl font-extrabold text-[#4A2511]"><span id="trayTotalPrice">0</span> <span id="trayCurrency" class="text-xs sm:text-sm font-bold text-[#C86D2D]">EGP</span></div>
+                    </div>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="clearOrder()" id="clearTrayBtn" class="px-3.5 py-2.5 rounded-2xl border border-[#C86D2D]/50 text-[#C86D2D] hover:bg-[#C86D2D]/10 text-xs sm:text-sm font-bold transition">مسح</button>
+                    <button onclick="toggleOrderModal(true)" id="viewTrayBtn" class="px-5 py-2.5 rounded-2xl btn-accent text-xs sm:text-sm shadow-md">عرض التفاصيل والطلب</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="orderModal" class="fixed inset-0 z-50 hidden bg-[#2B150A]/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="menu-card rounded-3xl max-w-lg w-full p-5 sm:p-7 max-h-[85vh] flex flex-col border-2 border-[#4A2511]">
+            <div class="flex items-center justify-between border-b border-[#E2CEB5] pb-3.5 mb-4">
+                <h3 id="modalTitle" class="font-luxury text-2xl sm:text-3xl font-bold text-[#4A2511]">قائمة اختياراتك</h3>
+                <button onclick="toggleOrderModal(false)" class="w-9 h-9 rounded-full bg-[#F3E5D0] border border-[#E2CEB5] text-[#4A2511] flex items-center justify-center hover:bg-[#E2CEB5] font-bold">✕</button>
+            </div>
+            <div id="modalItemsList" class="overflow-y-auto flex-grow space-y-2.5 pr-1"></div>
+            <div class="border-t border-[#E2CEB5] pt-4 mt-4">
+                <div class="flex items-center justify-between text-lg font-bold mb-4">
+                    <span id="modalTotalLabel" class="text-[#6E5343]">الإجمالي التقريبي:</span>
+                    <span class="text-2xl text-[#4A2511]"><span id="modalTotalAmount">0</span> <span id="modalCurrency" class="text-sm text-[#C86D2D]">EGP</span></span>
+                </div>
+                <div class="flex gap-2.5">
+                    <button onclick="clearOrder(); toggleOrderModal(false);" id="modalClearBtn" class="w-1/3 py-3 rounded-2xl border border-[#C86D2D]/50 text-[#C86D2D] hover:bg-[#C86D2D]/10 text-sm font-bold transition">إفراغ القائمة</button>
+                    <button onclick="toggleOrderModal(false)" id="modalCloseBtn" class="w-2/3 py-3 rounded-2xl btn-active text-sm font-bold shadow-md">إغلاق ومتابعة التصفح</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const STORAGE_KEY_MENU = 'sinaCafe_menuData_v1';
+        const STORAGE_KEY_SETTINGS = 'sinaCafe_settings_v1';
+        const defaultVenueSettings = ${JSON.stringify(venueSettings)};
+        const defaultMenuCategories = ${JSON.stringify(menuCategories)};
+
+        const uiTranslations = {
+            ar: { dir: "rtl", title: "Sina Café", subtitle: "Sharm El Sheikh", slogan: "«Good Drinks... Great Moments...»", locationLabel: "العنوان / Location", hoursLabel: "مواعيد العمل / Hours", searchPlaceholder: "ابحث عن مشروبك أو نكهتك المفضلة...", allCategories: "جميع الأقسام", currency: "EGP", tapHint: "اضغط على أي صنف لإضافته لحاسبة الطلبات وتسهيل طلبك", emptyTitle: "لا توجد نتائج مطابقة", emptyDesc: "جرب البحث بكلمة أخرى أو استعرض جميع الأقسام", resetBtn: "عرض كل المنيو", trayTotalLabel: "إجمالي الطلبات المختارة", clearBtn: "مسح", viewTrayBtn: "عرض الطلب", modalTitle: "ملخص اختياراتك للطلب", modalTotalLabel: "الإجمالي التقريبي:", modalClearBtn: "إفراغ", modalCloseBtn: "متابعة التصفح" },
+            en: { dir: "ltr", title: "Sina Café", subtitle: "Sharm El Sheikh", slogan: '"Good Drinks... Great Moments..."', locationLabel: "Location", hoursLabel: "Working Hours", searchPlaceholder: "Search for your favorite drink or flavor...", allCategories: "All Categories", currency: "EGP", tapHint: "Tap any item to add it to your bill calculator for easy ordering", emptyTitle: "No matching items found", emptyDesc: "Try searching with a different keyword or view all categories", resetBtn: "Show Full Menu", trayTotalLabel: "Selected Items Total", clearBtn: "Clear", viewTrayBtn: "View Order", modalTitle: "Your Order Summary", modalTotalLabel: "Total Estimate:", modalClearBtn: "Clear All", modalCloseBtn: "Continue Browsing" },
+            ru: { dir: "ltr", title: "Sina Café", subtitle: "Sharm El Sheikh", slogan: '«Хорошие напитки... Отличные моменты...»', locationLabel: "Адрес", hoursLabel: "Часы работы", searchPlaceholder: "Поиск напитков или вкусов...", allCategories: "Все категории", currency: "EGP", tapHint: "Нажмите на позицию, чтобы добавить в калькулятор заказа", emptyTitle: "Ничего не найдено", emptyDesc: "Попробуйте другой запрос или откройте все категории", resetBtn: "Показать всё меню", trayTotalLabel: "Сумма выбранного", clearBtn: "Сброс", viewTrayBtn: "Ваш заказ", modalTitle: "Ваш заказ", modalTotalLabel: "Итого:", modalClearBtn: "Очистить", modalCloseBtn: "Вернуться в меню" },
+            it: { dir: "ltr", title: "Sina Café", subtitle: "Sharm El Sheikh", slogan: '"Good Drinks... Great Moments..."', locationLabel: "Indirizzo", hoursLabel: "Orari di Apertura", searchPlaceholder: "Cerca la tua bevanda o gusto preferito...", allCategories: "Tutte le Categorie", currency: "EGP", tapHint: "Tocca un elemento per calcolare il totale dell'ordine", emptyTitle: "Nessun risultato trovato", emptyDesc: "Prova a cercare un'altra parola o mostra tutte le categorie", resetBtn: "Mostra Tutto il Menu", trayTotalLabel: "Totale Selezionato", clearBtn: "Svuota", viewTrayBtn: "Vedi Ordine", modalTitle: "Riepilogo Ordine", modalTotalLabel: "Totale:", modalClearBtn: "Cancella", modalCloseBtn: "Continua a Sfoglia" }
+        };
+
+        let menuCategories = defaultMenuCategories;
+        let venueSettings = defaultVenueSettings;
+        let currentLang = 'ar';
+        let activeCategory = 'all';
+        let searchQuery = '';
+        let cart = {};
+
+        function getLocalizedText(obj, lang) { return obj ? (obj[lang] || obj['en'] || obj['ar'] || '') : ''; }
+        function findItemById(id) { for (const cat of menuCategories) { for (const item of cat.items) { if (item.id === id) return item; } } return null; }
+
+        function setLanguage(lang) {
+            currentLang = lang;
+            const t = uiTranslations[lang];
+            document.documentElement.lang = lang;
+            document.documentElement.dir = t.dir;
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('btn-active'));
+            document.getElementById(\`lang-\${lang}\`).classList.add('btn-active');
+            document.getElementById('navBrand').textContent = t.title;
+            document.getElementById('heroSubtitle').textContent = t.subtitle;
+            document.getElementById('heroSlogan').textContent = t.slogan;
+            document.getElementById('footerSlogan').textContent = t.slogan;
+            document.getElementById('locationLabel').textContent = t.locationLabel;
+            document.getElementById('locationText').textContent = getLocalizedText(venueSettings.location, lang);
+            document.getElementById('hoursLabel').textContent = t.hoursLabel;
+            document.getElementById('hoursText').textContent = getLocalizedText(venueSettings.hours, lang);
+            document.getElementById('searchInput').placeholder = t.searchPlaceholder;
+            document.getElementById('tapToCalcHint').textContent = t.tapHint;
+            document.getElementById('emptyStateTitle').textContent = t.emptyTitle;
+            document.getElementById('emptyStateDesc').textContent = t.emptyDesc;
+            document.getElementById('resetFilterBtn').textContent = t.resetBtn;
+            document.getElementById('trayTotalLabel').textContent = t.trayTotalLabel;
+            document.getElementById('trayCurrency').textContent = t.currency;
+            document.getElementById('clearTrayBtn').textContent = t.clearBtn;
+            document.getElementById('viewTrayBtn').textContent = t.viewTrayBtn;
+            document.getElementById('modalTitle').textContent = t.modalTitle;
+            document.getElementById('modalTotalLabel').textContent = t.modalTotalLabel;
+            document.getElementById('modalCurrency').textContent = t.currency;
+            document.getElementById('modalClearBtn').textContent = t.modalClearBtn;
+            document.getElementById('modalCloseBtn').textContent = t.modalCloseBtn;
+            renderCategoryTabs();
+            renderMenuGrid();
+            updateOrderTrayUI();
+        }
+
+        function renderCategoryTabs() {
+            const container = document.getElementById('categoryTabs');
+            const t = uiTranslations[currentLang];
+            let html = \`<button onclick="setCategory('all')" class="shrink-0 px-4 py-2 rounded-2xl text-xs sm:text-sm border border-[#E2CEB5] text-[#4A2511] font-semibold transition-all \${activeCategory === 'all' ? 'btn-active' : 'hover:border-[#C86D2D] bg-[#FDF8F2]'}">✨ \${t.allCategories}</button>\`;
+            menuCategories.forEach(cat => {
+                if (cat.items.filter(i => i.available !== false).length === 0) return;
+                const isActive = activeCategory === cat.id;
+                html += \`<button onclick="setCategory('\${cat.id}')" class="shrink-0 px-4 py-2 rounded-2xl text-xs sm:text-sm border border-[#E2CEB5] text-[#4A2511] font-semibold transition-all flex items-center gap-1.5 \${isActive ? 'btn-active' : 'hover:border-[#C86D2D] bg-[#FDF8F2]'}"><span>\${cat.icon}</span><span>\${getLocalizedText(cat.title, currentLang)}</span></button>\`;
+            });
+            container.innerHTML = html;
+        }
+
+        function setCategory(id) { activeCategory = id; renderCategoryTabs(); renderMenuGrid(); }
+        function handleSearch(val) { searchQuery = val.trim().toLowerCase(); document.getElementById('clearSearchBtn').classList.toggle('hidden', searchQuery.length === 0); renderMenuGrid(); }
+        function clearSearch() { document.getElementById('searchInput').value = ''; handleSearch(''); }
+        function resetFilters() { activeCategory = 'all'; clearSearch(); renderCategoryTabs(); renderMenuGrid(); }
+
+        function renderMenuGrid() {
+            const grid = document.getElementById('menuGrid');
+            const emptyState = document.getElementById('emptyState');
+            const t = uiTranslations[currentLang];
+            let cardsHtml = '';
+            let totalVisible = 0;
+
+            menuCategories.forEach(cat => {
+                if (activeCategory !== 'all' && activeCategory !== cat.id) return;
+                const filtered = cat.items.filter(item => {
+                    if (item.available === false) return false;
+                    if (!searchQuery) return true;
+                    return (item.name.ar || '').toLowerCase().includes(searchQuery) || (item.name.en || '').toLowerCase().includes(searchQuery) || (item.name.ru || '').toLowerCase().includes(searchQuery) || (item.name.it || '').toLowerCase().includes(searchQuery) || String(item.price).includes(searchQuery);
+                });
+                if (filtered.length === 0) return;
+                totalVisible += filtered.length;
+
+                let itemsHtml = '';
+                filtered.forEach(item => {
+                    const qty = cart[item.id] || 0;
+                    const primaryName = getLocalizedText(item.name, currentLang);
+                    const secondaryName = currentLang !== 'en' ? (item.name.en || '') : '';
+                    itemsHtml += \`
+                        <div onclick="addToOrder('\${item.id}')" class="menu-item-row group cursor-pointer rounded-2xl px-3.5 py-3 flex items-baseline justify-between select-none">
+                            <div class="flex items-center gap-2.5 pr-1">
+                                <span class="w-6 h-6 rounded-full border \${qty > 0 ? 'bg-[#C86D2D] text-white border-[#C86D2D]' : 'border-[#C86D2D]/60 text-[#C86D2D] group-hover:bg-[#C86D2D] group-hover:text-white'} flex items-center justify-center text-xs transition-colors shrink-0 font-bold">\${qty > 0 ? qty : '+'}</span>
+                                <div>
+                                    <span class="text-[#2B150A] font-bold text-sm sm:text-base group-hover:text-[#C86D2D] transition-colors">\${primaryName}</span>
+                                    \${secondaryName ? \`<span class="block text-[11px] text-[#6E5343] font-normal">\${secondaryName}</span>\` : ''}
+                                </div>
+                            </div>
+                            <div class="leader-dots"></div>
+                            <div class="shrink-0 flex items-baseline gap-1">
+                                <span class="text-[#4A2511] font-extrabold text-base sm:text-lg tracking-tight">\${item.price}</span>
+                                <span class="text-[11px] text-[#C86D2D] font-bold">\${t.currency}</span>
+                            </div>
+                        </div>\`;
+                });
+
+                cardsHtml += \`
+                    <section class="menu-card rounded-3xl overflow-hidden flex flex-col">
+                        <div class="bg-[#F3E5D0]/65 border-b border-[#E2CEB5] px-5 py-4 flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-11 h-11 rounded-2xl bg-[#FDF8F2] border border-[#C86D2D]/40 flex items-center justify-center text-2xl shadow-sm">\${cat.icon}</div>
+                                <div>
+                                    <h2 class="font-luxury text-2xl sm:text-3xl font-bold text-[#4A2511]">\${getLocalizedText(cat.title, currentLang)}</h2>
+                                    \${currentLang !== 'en' && cat.title.en ? \`<p class="text-xs text-[#6E5343] tracking-wider uppercase font-semibold">\${cat.title.en}</p>\` : ''}
+                                </div>
+                            </div>
+                            <span class="text-xs text-[#4A2511] bg-[#FDF8F2] border border-[#E2CEB5] px-3 py-1 rounded-full font-bold shadow-xs">\${filtered.length}</span>
+                        </div>
+                        <div class="p-3.5 sm:p-5 divide-y divide-[#E2CEB5]/60 flex-grow">\${itemsHtml}</div>
+                    </section>\`;
+            });
+
+            grid.innerHTML = cardsHtml;
+            emptyState.classList.toggle('hidden', totalVisible > 0);
+        }
+
+        function addToOrder(id) { cart[id] = (cart[id] || 0) + 1; renderMenuGrid(); updateOrderTrayUI(); }
+        function changeQty(id, delta) { if (!cart[id]) return; cart[id] += delta; if (cart[id] <= 0) delete cart[id]; renderMenuGrid(); updateOrderTrayUI(); }
+        function clearOrder() { cart = {}; renderMenuGrid(); updateOrderTrayUI(); }
+
+        function updateOrderTrayUI() {
+            const trayBar = document.getElementById('orderTrayBar');
+            const t = uiTranslations[currentLang];
+            let totalItems = 0, totalPrice = 0, modalHtml = '';
+            Object.keys(cart).forEach(id => {
+                const qty = cart[id], item = findItemById(id);
+                if (!item) return;
+                totalItems += qty;
+                const lineTotal = item.price * qty;
+                totalPrice += lineTotal;
+                modalHtml += \`
+                    <div class="flex items-center justify-between bg-[#F3E5D0]/55 border border-[#E2CEB5] rounded-2xl p-3">
+                        <div>
+                            <div class="font-bold text-[#2B150A] text-sm sm:text-base">\${getLocalizedText(item.name, currentLang)}</div>
+                            <div class="text-xs text-[#6E5343]">\${item.price} \${t.currency} × \${qty} = <span class="font-extrabold text-[#4A2511]">\${lineTotal} \${t.currency}</span></div>
+                        </div>
+                        <div class="flex items-center gap-2">
+                            <button onclick="changeQty('\${item.id}', -1)" class="w-8 h-8 rounded-xl bg-[#FDF8F2] border border-[#E2CEB5] text-[#4A2511] flex items-center justify-center font-bold">-</button>
+                            <span class="w-6 text-center font-bold text-sm text-[#2B150A]">\${qty}</span>
+                            <button onclick="changeQty('\${item.id}', 1)" class="w-8 h-8 rounded-xl bg-[#FDF8F2] border border-[#E2CEB5] text-[#4A2511] flex items-center justify-center font-bold">+</button>
+                        </div>
+                    </div>\`;
+            });
+            document.getElementById('trayCountBadge').textContent = totalItems;
+            document.getElementById('trayTotalPrice').textContent = totalPrice;
+            document.getElementById('modalTotalAmount').textContent = totalPrice;
+            document.getElementById('modalItemsList').innerHTML = modalHtml;
+            if (totalItems > 0) trayBar.classList.remove('translate-y-full');
+            else { trayBar.classList.add('translate-y-full'); toggleOrderModal(false); }
+        }
+
+        function toggleOrderModal(show) { document.getElementById('orderModal').classList.toggle('hidden', !show); }
+        window.onload = () => setLanguage('ar');
+    <\/script>
+</body>
+</html>`;
+
+            const blob = new Blob([htmlContent], { type: 'text/html;charset=utf-8' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = 'index.html';
+            a.click();
+            showToast('تم تحميل ملف index.html المحدّث وجاهز للرفع ✓');
+        }
+
+        function initAdmin() {
+            updateStats();
+            populateCategoryDropdowns();
+            renderAdminItems();
+            renderAdminCategories();
+            loadSettingsForm();
+        }
+
+        window.onload = function() {
+            if (sessionStorage.getItem('sinaCafe_auth') === 'true') {
+                document.getElementById('loginScreen').classList.add('hidden');
+                document.getElementById('adminDashboard').classList.remove('hidden');
+                initAdmin();
+            }
+        };
+    </script>
+</body>
+</html>
