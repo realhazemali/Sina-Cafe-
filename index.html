@@ -4,31 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Sina Café - Sharm El Sheikh | Digital Menu</title>
-    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Google Fonts for Luxury Typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Amiri:ital,wght@0,400;0,700;1,400&family=Cairo:wght@400;600;700;800;900&family=Cormorant+Garamond:ital,wght@0,600;0,700;1,600&family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --bg-dark: #0d0d10;
-            --card-dark: #141418;
-            --gold-primary: #d4af37;
-            --gold-light: #f3e5ab;
-            --gold-dark: #aa771c;
-            --neon-red: #ff2233;
-            --neon-orange: #ff7700;
+            --bg-main: #F3E5D0;
+            --bg-card: #FDF8F2;
+            --color-primary: #4A2511;
+            --color-accent: #C86D2D;
+            --text-main: #2B150A;
+            --text-muted: #6E5343;
+            --border-subtle: #E2CEB5;
         }
 
         body {
-            background-color: var(--bg-dark);
+            background-color: var(--bg-main);
             background-image: 
-                radial-gradient(circle at 10% 10%, rgba(212, 175, 55, 0.07) 0%, transparent 45%),
-                radial-gradient(circle at 90% 90%, rgba(255, 34, 51, 0.05) 0%, transparent 45%),
-                linear-gradient(180deg, #09090c 0%, #121216 50%, #08080a 100%);
-            color: #f3f4f6;
+                radial-gradient(circle at 12% 8%, rgba(200, 109, 45, 0.08) 0%, transparent 45%),
+                radial-gradient(circle at 88% 92%, rgba(74, 37, 17, 0.06) 0%, transparent 45%);
+            color: var(--text-main);
             min-height: 100vh;
             overflow-x: hidden;
         }
@@ -44,119 +41,101 @@
             font-family: 'Cormorant Garamond', 'Amiri', serif;
         }
 
-        /* Storefront Glowing Neon Red/Orange Brand Sign Style */
-        .storefront-glow-text {
-            color: #ffffff;
-            text-shadow: 
-                0 0 4px #ffffff,
-                0 0 10px rgba(255, 34, 51, 0.9),
-                0 0 22px rgba(255, 34, 51, 0.8),
-                0 0 40px rgba(255, 119, 0, 0.6);
+        .brand-title-text {
+            color: var(--color-primary);
+            text-shadow: 0 2px 12px rgba(200, 109, 45, 0.22);
         }
 
-        /* Metallic Gold Gradient Text */
-        .gold-gradient-text {
-            background: linear-gradient(to bottom, #fff8e1 0%, #f3e5ab 35%, #d4af37 65%, #996f16 100%);
+        .primary-gradient-text {
+            background: linear-gradient(135deg, #4A2511 0%, #7C3D1D 55%, #C86D2D 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
-            filter: drop-shadow(0px 2px 6px rgba(0, 0, 0, 0.8));
         }
 
-        /* Luxury Card with Gold Border & Storefront Wood Texture Vibe */
-        .luxury-card {
-            background: linear-gradient(145deg, rgba(22, 21, 28, 0.94) 0%, rgba(12, 12, 16, 0.98) 100%);
-            border: 1.5px solid rgba(212, 175, 55, 0.45);
+        .menu-card {
+            background-color: var(--bg-card);
+            border: 1.5px solid var(--border-subtle);
             box-shadow: 
-                0 12px 35px -5px rgba(0, 0, 0, 0.9),
-                0 0 18px rgba(212, 175, 55, 0.1),
-                inset 0 0 25px rgba(212, 175, 55, 0.04);
+                0 10px 28px -6px rgba(74, 37, 17, 0.09),
+                0 2px 6px -1px rgba(74, 37, 17, 0.05);
             position: relative;
             transition: all 0.25s ease;
         }
 
-        .luxury-card:hover {
-            border-color: rgba(243, 229, 171, 0.8);
+        .menu-card:hover {
+            border-color: var(--color-accent);
             box-shadow: 
-                0 16px 40px -5px rgba(0, 0, 0, 0.95),
-                0 0 25px rgba(212, 175, 55, 0.2),
-                inset 0 0 30px rgba(212, 175, 55, 0.07);
+                0 14px 34px -6px rgba(74, 37, 17, 0.14),
+                0 4px 12px -2px rgba(200, 109, 45, 0.12);
         }
 
-        /* Dotted Leader Line */
         .leader-dots {
             flex-grow: 1;
-            border-bottom: 1px dotted rgba(212, 175, 55, 0.35);
+            border-bottom: 1.5px dotted var(--border-subtle);
             margin: 0 10px;
             position: relative;
             top: -4px;
         }
 
-        /* Custom Scrollbar */
         ::-webkit-scrollbar {
             width: 6px;
             height: 6px;
         }
         ::-webkit-scrollbar-track {
-            background: #0a0a0e;
+            background: var(--bg-main);
         }
         ::-webkit-scrollbar-thumb {
-            background: linear-gradient(180deg, #aa771c, #d4af37);
+            background: linear-gradient(180deg, var(--color-accent), var(--color-primary));
             border-radius: 9999px;
         }
 
-        .gold-btn-active {
-            background: linear-gradient(135deg, #f3e5ab 0%, #d4af37 55%, #996f16 100%);
-            color: #0d0d10 !important;
+        .btn-active {
+            background: linear-gradient(135deg, var(--color-primary) 0%, #633319 100%);
+            color: var(--bg-card) !important;
             font-weight: 700;
-            box-shadow: 0 0 18px rgba(212, 175, 55, 0.55);
+            box-shadow: 0 4px 14px rgba(74, 37, 17, 0.25);
             border-color: transparent !important;
+        }
+
+        .btn-accent {
+            background: linear-gradient(135deg, var(--color-accent) 0%, #B05A1E 100%);
+            color: #FFFFFF !important;
+            font-weight: 700;
+            box-shadow: 0 4px 14px rgba(200, 109, 45, 0.3);
         }
 
         .menu-item-row {
             transition: background 0.2s ease, transform 0.1s ease;
         }
         .menu-item-row:hover {
-            background: rgba(212, 175, 55, 0.08);
+            background: rgba(200, 109, 45, 0.07);
         }
         .menu-item-row:active {
             transform: scale(0.99);
         }
-
-        /* Fingerprint neon pulse animation */
-        @keyframes neonPulse {
-            0%, 100% { filter: drop-shadow(0 0 6px rgba(0, 190, 255, 0.8)); }
-            50% { filter: drop-shadow(0 0 16px rgba(0, 190, 255, 1)); }
-        }
-        .neon-fingerprint {
-            animation: neonPulse 3s infinite ease-in-out;
-        }
     </style>
 </head>
-<body class="pb-32 selection:bg-amber-500 selection:text-black">
+<body class="pb-32 selection:bg-[#C86D2D] selection:text-white">
 
     <!-- Top Sticky Navigation Bar -->
-    <div class="sticky top-0 z-40 backdrop-blur-md bg-[#0d0d10]/95 border-b border-amber-500/30 shadow-2xl">
+    <div class="sticky top-0 z-40 backdrop-blur-md bg-[#FDF8F2]/92 border-b border-[#E2CEB5] shadow-sm">
         <div class="max-w-6xl mx-auto px-3 py-2.5 flex flex-wrap items-center justify-between gap-2">
-            <!-- Brand Badge with Fingerprint Mini Icon -->
-            <div class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-full bg-cyan-950/80 border border-cyan-400/60 flex items-center justify-center text-cyan-300 neon-fingerprint text-xs">
-                    🌀
-                </div>
-                <span id="navBrand" class="font-luxury text-xl font-bold storefront-glow-text tracking-wide">SINA CAFÉ</span>
+            <div class="flex items-center">
+                <span id="navBrand" class="font-luxury text-xl font-bold text-[#4A2511] tracking-wide">SINA CAFÉ</span>
             </div>
 
-            <!-- Language Switcher Buttons (AR, EN, RU, IT) -->
+            <!-- Language Switcher Buttons -->
             <div class="flex items-center gap-1.5 overflow-x-auto py-0.5">
-                <button onclick="setLanguage('ar')" id="lang-ar" class="lang-btn px-3 py-1.5 rounded-full text-xs font-semibold border border-amber-500/40 text-amber-200 hover:border-amber-400 transition-all flex items-center gap-1">
+                <button onclick="setLanguage('ar')" id="lang-ar" class="lang-btn px-3 py-1.5 rounded-full text-xs font-semibold border border-[#E2CEB5] bg-[#FDF8F2] text-[#4A2511] hover:border-[#C86D2D] transition-all flex items-center gap-1">
                     <span>🇪🇬</span> <span>عربي</span>
                 </button>
-                <button onclick="setLanguage('en')" id="lang-en" class="lang-btn px-3 py-1.5 rounded-full text-xs font-semibold border border-amber-500/40 text-amber-200 hover:border-amber-400 transition-all flex items-center gap-1">
+                <button onclick="setLanguage('en')" id="lang-en" class="lang-btn px-3 py-1.5 rounded-full text-xs font-semibold border border-[#E2CEB5] bg-[#FDF8F2] text-[#4A2511] hover:border-[#C86D2D] transition-all flex items-center gap-1">
                     <span>🇬🇧</span> <span>EN</span>
                 </button>
-                <button onclick="setLanguage('ru')" id="lang-ru" class="lang-btn px-3 py-1.5 rounded-full text-xs font-semibold border border-amber-500/40 text-amber-200 hover:border-amber-400 transition-all flex items-center gap-1">
+                <button onclick="setLanguage('ru')" id="lang-ru" class="lang-btn px-3 py-1.5 rounded-full text-xs font-semibold border border-[#E2CEB5] bg-[#FDF8F2] text-[#4A2511] hover:border-[#C86D2D] transition-all flex items-center gap-1">
                     <span>🇷🇺</span> <span>RU</span>
                 </button>
-                <button onclick="setLanguage('it')" id="lang-it" class="lang-btn px-3 py-1.5 rounded-full text-xs font-semibold border border-amber-500/40 text-amber-200 hover:border-amber-400 transition-all flex items-center gap-1">
+                <button onclick="setLanguage('it')" id="lang-it" class="lang-btn px-3 py-1.5 rounded-full text-xs font-semibold border border-[#E2CEB5] bg-[#FDF8F2] text-[#4A2511] hover:border-[#C86D2D] transition-all flex items-center gap-1">
                     <span>🇮🇹</span> <span>IT</span>
                 </button>
             </div>
@@ -164,36 +143,25 @@
     </div>
 
     <!-- Storefront Hero Header Section -->
-    <header class="relative overflow-hidden pt-8 pb-6 px-4 text-center border-b border-amber-500/20">
-        <!-- Glowing background aura matching the storefront sign -->
-        <div class="absolute inset-0 pointer-events-none flex justify-center items-center opacity-15">
-            <div class="w-[500px] h-[300px] rounded-full bg-gradient-to-r from-red-600 via-orange-500 to-amber-500 blur-[120px]"></div>
+    <header class="relative overflow-hidden pt-8 pb-6 px-4 text-center border-b border-[#E2CEB5]">
+        <div class="absolute inset-0 pointer-events-none flex justify-center items-center opacity-25">
+            <div class="w-[500px] h-[280px] rounded-full bg-gradient-to-r from-[#C86D2D]/40 via-[#E2CEB5] to-[#4A2511]/20 blur-[100px]"></div>
         </div>
 
         <div class="max-w-4xl mx-auto relative z-10">
-            <!-- Storefront Fingerprint & Mountain Logo Motif -->
-            <div class="flex items-center justify-center gap-4 mb-3">
-                <div class="w-16 h-16 rounded-2xl bg-[#09090d] border-2 border-cyan-400 shadow-[0_0_20px_rgba(0,180,255,0.4)] flex items-center justify-center neon-fingerprint text-3xl">
-                    🌀
-                </div>
-            </div>
-
-            <!-- Storefront Glowing Neon Title -->
-            <h1 id="heroTitle" class="font-luxury text-6xl sm:text-7xl md:text-8xl font-black storefront-glow-text tracking-wider uppercase mb-1">
+            <h1 id="heroTitle" class="font-luxury text-6xl sm:text-7xl md:text-8xl font-black brand-title-text tracking-wider uppercase mb-1">
                 Sina Café
             </h1>
 
-            <!-- Sharm El Sheikh Subtitle -->
             <div class="flex items-center justify-center gap-3 my-2">
-                <span class="h-[1px] w-16 sm:w-28 bg-gradient-to-r from-transparent via-amber-400 to-amber-300"></span>
-                <p id="heroSubtitle" class="font-luxury text-xl sm:text-2xl text-amber-300 font-semibold tracking-widest uppercase">
+                <span class="h-[1.5px] w-16 sm:w-28 bg-gradient-to-r from-transparent via-[#C86D2D] to-[#4A2511]"></span>
+                <p id="heroSubtitle" class="font-luxury text-xl sm:text-2xl text-[#C86D2D] font-bold tracking-widest uppercase">
                     Sharm El Sheikh
                 </p>
-                <span class="h-[1px] w-16 sm:w-28 bg-gradient-to-l from-transparent via-amber-400 to-amber-300"></span>
+                <span class="h-[1.5px] w-16 sm:w-28 bg-gradient-to-l from-transparent via-[#C86D2D] to-[#4A2511]"></span>
             </div>
 
-            <!-- Slogan -->
-            <p id="heroSlogan" class="text-amber-100/80 italic text-sm sm:text-base mt-2 font-luxury tracking-wider">
+            <p id="heroSlogan" class="text-[#6E5343] italic text-sm sm:text-base mt-2 font-luxury tracking-wider">
                 "Good Drinks... Great Moments..."
             </p>
         </div>
@@ -201,7 +169,6 @@
 
     <!-- Search & Category Filters -->
     <section class="max-w-6xl mx-auto px-4 pt-6 pb-2">
-        <!-- Search bar & hint -->
         <div class="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between mb-5">
             <div class="relative flex-grow max-w-xl">
                 <input 
@@ -209,41 +176,36 @@
                     id="searchInput" 
                     oninput="handleSearch(this.value)"
                     placeholder="ابحث عن مشروبك المفضل..." 
-                    class="w-full bg-[#121216] text-amber-50 placeholder-amber-200/40 border border-amber-500/40 focus:border-amber-400 rounded-2xl py-3 px-11 outline-none transition-all shadow-inner text-sm sm:text-base"
+                    class="w-full bg-[#FDF8F2] text-[#2B150A] placeholder-[#6E5343]/70 border border-[#E2CEB5] focus:border-[#C86D2D] rounded-2xl py-3 px-11 outline-none transition-all shadow-sm text-sm sm:text-base"
                 >
-                <svg class="w-5 h-5 text-amber-400 absolute top-3.5 right-3.5 rtl:right-3.5 ltr:left-3.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <svg class="w-5 h-5 text-[#C86D2D] absolute top-3.5 right-3.5 rtl:right-3.5 ltr:left-3.5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
                 </svg>
-                <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute top-3 left-3.5 rtl:left-3.5 ltr:right-3.5 text-amber-400 hover:text-amber-200 text-sm">
+                <button id="clearSearchBtn" onclick="clearSearch()" class="hidden absolute top-3 left-3.5 rtl:left-3.5 ltr:right-3.5 text-[#6E5343] hover:text-[#4A2511] text-sm font-bold">
                     ✕
                 </button>
             </div>
 
-            <!-- Interactive calculation hint -->
-            <div class="text-xs sm:text-sm text-amber-300/90 bg-amber-500/10 border border-amber-500/30 rounded-2xl px-4 py-2.5 flex items-center gap-2 self-start sm:self-auto">
+            <div class="text-xs sm:text-sm text-[#4A2511] bg-[#FDF8F2] border border-[#E2CEB5] rounded-2xl px-4 py-2.5 flex items-center gap-2 self-start sm:self-auto shadow-sm">
                 <span>✨</span>
                 <span id="tapToCalcHint">اضغط على أي صنف لإضافته لحاسبة الطلبات وتسهيل طلبك</span>
             </div>
         </div>
 
         <!-- Category Filter Buttons -->
-        <div id="categoryTabs" class="flex items-center gap-2 overflow-x-auto pb-3 pt-1 no-scrollbar">
-            <!-- Dynamically populated -->
-        </div>
+        <div id="categoryTabs" class="flex items-center gap-2 overflow-x-auto pb-3 pt-1 no-scrollbar"></div>
     </section>
 
     <!-- Main Menu Cards Grid -->
     <main class="max-w-6xl mx-auto px-4 py-4">
-        <div id="menuGrid" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <!-- Dynamically populated -->
-        </div>
+        <div id="menuGrid" class="grid grid-cols-1 lg:grid-cols-2 gap-6"></div>
 
         <!-- Empty State -->
-        <div id="emptyState" class="hidden text-center py-16 luxury-card rounded-3xl p-8 max-w-md mx-auto my-6">
+        <div id="emptyState" class="hidden text-center py-16 menu-card rounded-3xl p-8 max-w-md mx-auto my-6">
             <div class="text-4xl mb-3">🍹</div>
-            <h3 id="emptyStateTitle" class="text-xl font-bold text-amber-300 mb-1">لا توجد نتائج مطابقة</h3>
-            <p id="emptyStateDesc" class="text-sm text-gray-400 mb-4">جرب البحث بكلمة أخرى أو استعرض جميع الأقسام</p>
-            <button onclick="resetFilters()" id="resetFilterBtn" class="px-5 py-2.5 rounded-full gold-btn-active text-sm">
+            <h3 id="emptyStateTitle" class="text-xl font-bold text-[#4A2511] mb-1">لا توجد نتائج مطابقة</h3>
+            <p id="emptyStateDesc" class="text-sm text-[#6E5343] mb-4">جرب البحث بكلمة أخرى أو استعرض جميع الأقسام</p>
+            <button onclick="resetFilters()" id="resetFilterBtn" class="px-5 py-2.5 rounded-full btn-active text-sm">
                 عرض كل المنيو
             </button>
         </div>
@@ -251,37 +213,37 @@
 
     <!-- Venue Location & Hours Footer -->
     <footer class="max-w-6xl mx-auto px-4 mt-12 mb-10">
-        <div class="luxury-card rounded-3xl p-6 sm:p-8 border border-amber-500/50 relative overflow-hidden">
+        <div class="menu-card rounded-3xl p-6 sm:p-8 border border-[#E2CEB5] relative overflow-hidden">
             <div class="text-center mb-6">
-                <p id="footerSlogan" class="font-luxury text-2xl sm:text-3xl italic gold-gradient-text">
+                <p id="footerSlogan" class="font-luxury text-2xl sm:text-3xl italic primary-gradient-text font-bold">
                     "Good Drinks... Great Moments..."
                 </p>
-                <div class="w-48 h-[1px] bg-gradient-to-r from-transparent via-amber-400 to-transparent mx-auto mt-3"></div>
+                <div class="w-48 h-[1.5px] bg-gradient-to-r from-transparent via-[#C86D2D] to-transparent mx-auto mt-3"></div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-5 items-center text-sm sm:text-base">
                 <!-- Location -->
-                <div class="flex items-start sm:items-center gap-3.5 bg-black/50 p-4 rounded-2xl border border-amber-500/25">
-                    <div class="w-11 h-11 rounded-2xl bg-amber-500/15 border border-amber-400/50 flex items-center justify-center shrink-0 text-amber-400 text-xl">
+                <div class="flex items-start sm:items-center gap-3.5 bg-[#F3E5D0]/60 p-4 rounded-2xl border border-[#E2CEB5]">
+                    <div class="w-11 h-11 rounded-2xl bg-[#FDF8F2] border border-[#C86D2D]/40 flex items-center justify-center shrink-0 text-[#C86D2D] text-xl shadow-sm">
                         📍
                     </div>
                     <div>
-                        <div id="locationLabel" class="text-xs text-amber-400/80 font-semibold uppercase tracking-wider">العنوان / Location</div>
-                        <div id="locationText" class="text-amber-50 font-medium mt-0.5">
-                            طريق السلام، شرم الشيخ - أمام كارفور، بجوار دلتا شرم
+                        <div id="locationLabel" class="text-xs text-[#C86D2D] font-bold uppercase tracking-wider">العنوان / Location</div>
+                        <div id="locationText" class="text-[#2B150A] font-semibold mt-0.5">
+                            طريق السلام، شرم الشيخ - أمام كارفور، بجوار فرع فودافون
                         </div>
                     </div>
                 </div>
 
                 <!-- Working Hours -->
-                <div class="flex items-start sm:items-center gap-3.5 bg-black/50 p-4 rounded-2xl border border-amber-500/25">
-                    <div class="w-11 h-11 rounded-2xl bg-amber-500/15 border border-amber-400/50 flex items-center justify-center shrink-0 text-amber-400 text-xl">
+                <div class="flex items-start sm:items-center gap-3.5 bg-[#F3E5D0]/60 p-4 rounded-2xl border border-[#E2CEB5]">
+                    <div class="w-11 h-11 rounded-2xl bg-[#FDF8F2] border border-[#C86D2D]/40 flex items-center justify-center shrink-0 text-[#C86D2D] text-xl shadow-sm">
                         🕒
                     </div>
                     <div>
-                        <div id="hoursLabel" class="text-xs text-amber-400/80 font-semibold uppercase tracking-wider">مواعيد العمل / Hours</div>
-                        <div id="hoursText" class="text-amber-50 font-medium mt-0.5">
-                            مفتوح يومياً: 8:00 صباحاً – 3:00 فجراً (Daily: 8 AM - 3 AM)
+                        <div id="hoursLabel" class="text-xs text-[#C86D2D] font-bold uppercase tracking-wider">مواعيد العمل / Hours</div>
+                        <div id="hoursText" class="text-[#2B150A] font-semibold mt-0.5">
+                            مفتوح يومياً: 8:00 صباحاً – 3:00 فجراً
                         </div>
                     </div>
                 </div>
@@ -292,25 +254,25 @@
     <!-- Fixed Bottom Order Calculator / Bill Tray -->
     <div id="orderTrayBar" class="fixed bottom-0 inset-x-0 z-50 transform translate-y-full transition-transform duration-300">
         <div class="max-w-4xl mx-auto px-3 pb-4">
-            <div class="bg-[#121217]/95 backdrop-blur-xl border-2 border-amber-400 rounded-3xl p-3.5 sm:p-4 shadow-[0_-15px_40px_rgba(0,0,0,0.9)] flex items-center justify-between gap-3">
+            <div class="bg-[#FDF8F2]/95 backdrop-blur-xl border-2 border-[#4A2511] rounded-3xl p-3.5 sm:p-4 shadow-[0_-10px_30px_rgba(74,37,17,0.18)] flex items-center justify-between gap-3">
                 <div class="flex items-center gap-3.5">
                     <div class="relative">
-                        <span class="w-12 h-12 rounded-2xl gold-btn-active flex items-center justify-center text-2xl shadow-lg">🧾</span>
-                        <span id="trayCountBadge" class="absolute -top-2 -right-2 bg-red-600 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-black">0</span>
+                        <span class="w-12 h-12 rounded-2xl btn-active flex items-center justify-center text-2xl shadow-md">🧾</span>
+                        <span id="trayCountBadge" class="absolute -top-2 -right-2 bg-[#C86D2D] text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center border-2 border-[#FDF8F2]">0</span>
                     </div>
                     <div>
-                        <div id="trayTotalLabel" class="text-xs text-amber-300/80 font-medium">إجمالي الطلبات المختارة</div>
-                        <div class="text-lg sm:text-2xl font-extrabold text-amber-400">
-                            <span id="trayTotalPrice">0</span> <span id="trayCurrency" class="text-xs sm:text-sm font-normal text-amber-200">EGP</span>
+                        <div id="trayTotalLabel" class="text-xs text-[#6E5343] font-semibold">إجمالي الطلبات المختارة</div>
+                        <div class="text-lg sm:text-2xl font-extrabold text-[#4A2511]">
+                            <span id="trayTotalPrice">0</span> <span id="trayCurrency" class="text-xs sm:text-sm font-bold text-[#C86D2D]">EGP</span>
                         </div>
                     </div>
                 </div>
 
                 <div class="flex items-center gap-2">
-                    <button onclick="clearOrder()" id="clearTrayBtn" class="px-3.5 py-2.5 rounded-2xl border border-red-500/40 text-red-300 hover:bg-red-500/10 text-xs sm:text-sm font-medium transition">
+                    <button onclick="clearOrder()" id="clearTrayBtn" class="px-3.5 py-2.5 rounded-2xl border border-[#C86D2D]/50 text-[#C86D2D] hover:bg-[#C86D2D]/10 text-xs sm:text-sm font-bold transition">
                         مسح
                     </button>
-                    <button onclick="toggleOrderModal(true)" id="viewTrayBtn" class="px-5 py-2.5 rounded-2xl gold-btn-active text-xs sm:text-sm shadow-md">
+                    <button onclick="toggleOrderModal(true)" id="viewTrayBtn" class="px-5 py-2.5 rounded-2xl btn-accent text-xs sm:text-sm shadow-md">
                         عرض التفاصيل والطلب
                     </button>
                 </div>
@@ -319,31 +281,27 @@
     </div>
 
     <!-- Order Summary Modal -->
-    <div id="orderModal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-md flex items-center justify-center p-4">
-        <div class="luxury-card rounded-3xl max-w-lg w-full p-5 sm:p-7 max-h-[85vh] flex flex-col border-2 border-amber-400">
-            <div class="flex items-center justify-between border-b border-amber-500/30 pb-3.5 mb-4">
-                <h3 id="modalTitle" class="font-luxury text-2xl sm:text-3xl font-bold gold-gradient-text">قائمة اختياراتك</h3>
-                <button onclick="toggleOrderModal(false)" class="w-9 h-9 rounded-full bg-amber-500/10 border border-amber-500/40 text-amber-300 flex items-center justify-center hover:bg-amber-500/20">
+    <div id="orderModal" class="fixed inset-0 z-50 hidden bg-[#2B150A]/60 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="menu-card rounded-3xl max-w-lg w-full p-5 sm:p-7 max-h-[85vh] flex flex-col border-2 border-[#4A2511]">
+            <div class="flex items-center justify-between border-b border-[#E2CEB5] pb-3.5 mb-4">
+                <h3 id="modalTitle" class="font-luxury text-2xl sm:text-3xl font-bold text-[#4A2511]">قائمة اختياراتك</h3>
+                <button onclick="toggleOrderModal(false)" class="w-9 h-9 rounded-full bg-[#F3E5D0] border border-[#E2CEB5] text-[#4A2511] flex items-center justify-center hover:bg-[#E2CEB5] font-bold">
                     ✕
                 </button>
             </div>
 
-            <!-- Items List -->
-            <div id="modalItemsList" class="overflow-y-auto flex-grow space-y-2.5 pr-1">
-                <!-- Dynamically populated -->
-            </div>
+            <div id="modalItemsList" class="overflow-y-auto flex-grow space-y-2.5 pr-1"></div>
 
-            <!-- Modal Footer -->
-            <div class="border-t border-amber-500/30 pt-4 mt-4">
+            <div class="border-t border-[#E2CEB5] pt-4 mt-4">
                 <div class="flex items-center justify-between text-lg font-bold mb-4">
-                    <span id="modalTotalLabel" class="text-amber-200">الإجمالي التقريبي:</span>
-                    <span class="text-2xl text-amber-400"><span id="modalTotalAmount">0</span> <span id="modalCurrency" class="text-sm">EGP</span></span>
+                    <span id="modalTotalLabel" class="text-[#6E5343]">الإجمالي التقريبي:</span>
+                    <span class="text-2xl text-[#4A2511]"><span id="modalTotalAmount">0</span> <span id="modalCurrency" class="text-sm text-[#C86D2D]">EGP</span></span>
                 </div>
                 <div class="flex gap-2.5">
-                    <button onclick="clearOrder(); toggleOrderModal(false);" id="modalClearBtn" class="w-1/3 py-3 rounded-2xl border border-red-500/40 text-red-300 hover:bg-red-500/10 text-sm font-semibold transition">
+                    <button onclick="clearOrder(); toggleOrderModal(false);" id="modalClearBtn" class="w-1/3 py-3 rounded-2xl border border-[#C86D2D]/50 text-[#C86D2D] hover:bg-[#C86D2D]/10 text-sm font-bold transition">
                         إفراغ القائمة
                     </button>
-                    <button onclick="toggleOrderModal(false)" id="modalCloseBtn" class="w-2/3 py-3 rounded-2xl gold-btn-active text-sm font-bold shadow-md">
+                    <button onclick="toggleOrderModal(false)" id="modalCloseBtn" class="w-2/3 py-3 rounded-2xl btn-active text-sm font-bold shadow-md">
                         إغلاق ومتابعة التصفح
                     </button>
                 </div>
@@ -351,9 +309,25 @@
         </div>
     </div>
 
-    <!-- Application Script -->
     <script>
-        // Translations for UI
+        const STORAGE_KEY_MENU = 'sinaCafe_menuData_v1';
+        const STORAGE_KEY_SETTINGS = 'sinaCafe_settings_v1';
+
+        const defaultVenueSettings = {
+            location: {
+                ar: "طريق السلام، شرم الشيخ - أمام كارفور، بجوار فرع فودافون",
+                en: "El Salam Road, Sharm El Sheikh - In front of Carrefour, next to Vodafone branch",
+                ru: "ул. Эль-Салам, Шарм-эль-Шейх - Перед супермаркетом Carrefour, рядом с отделением Vodafone",
+                it: "El Salam Road, Sharm El Sheikh - Di fronte a Carrefour, vicino alla filiale Vodafone"
+            },
+            hours: {
+                ar: "مفتوح يومياً: 8:00 صباحاً – 3:00 فجراً",
+                en: "Open Daily: 8:00 AM – 3:00 AM",
+                ru: "Открыто ежедневно: с 8:00 до 3:00",
+                it: "Aperto tutti i giorni: 8:00 – 3:00"
+            }
+        };
+
         const uiTranslations = {
             ar: {
                 dir: "rtl",
@@ -361,9 +335,7 @@
                 subtitle: "Sharm El Sheikh",
                 slogan: "«Good Drinks... Great Moments...»",
                 locationLabel: "العنوان / Location",
-                location: "طريق السلام، شرم الشيخ - أمام كارفور، بجوار دلتا شرم",
                 hoursLabel: "مواعيد العمل / Hours",
-                hours: "مفتوح يومياً: 8:00 صباحاً – 3:00 فجراً",
                 searchPlaceholder: "ابحث عن مشروبك أو نكهتك المفضلة...",
                 allCategories: "جميع الأقسام",
                 currency: "EGP",
@@ -385,9 +357,7 @@
                 subtitle: "Sharm El Sheikh",
                 slogan: '"Good Drinks... Great Moments..."',
                 locationLabel: "Location",
-                location: "El Salam Road, Sharm El Sheikh - In front of Carrefour, next to Delta Sharm",
                 hoursLabel: "Working Hours",
-                hours: "Open Daily: 8:00 AM – 3:00 AM",
                 searchPlaceholder: "Search for your favorite drink or flavor...",
                 allCategories: "All Categories",
                 currency: "EGP",
@@ -409,9 +379,7 @@
                 subtitle: "Sharm El Sheikh",
                 slogan: '«Хорошие напитки... Отличные моменты...»',
                 locationLabel: "Адрес",
-                location: "ул. Эль-Салам, Шарм-эль-Шейх - Перед супермаркетом Carrefour, рядом с Delta Sharm",
                 hoursLabel: "Часы работы",
-                hours: "Открыто ежедневно: с 8:00 до 3:00",
                 searchPlaceholder: "Поиск напитков или вкусов...",
                 allCategories: "Все категории",
                 currency: "EGP",
@@ -433,9 +401,7 @@
                 subtitle: "Sharm El Sheikh",
                 slogan: '"Good Drinks... Great Moments..."',
                 locationLabel: "Indirizzo",
-                location: "El Salam Road, Sharm El Sheikh - Di fronte a Carrefour, vicino a Delta Sharm",
                 hoursLabel: "Orari di Apertura",
-                hours: "Aperto tutti i giorni: 8:00 – 3:00",
                 searchPlaceholder: "Cerca la tua bevanda o gusto preferito...",
                 allCategories: "Tutte le Categorie",
                 currency: "EGP",
@@ -453,156 +419,138 @@
             }
         };
 
-        // Fully Populated Menu Database across 4 Languages (Including Pepsi, 7UP, Fayrouz, Water)
-        const menuCategories = [
+        const defaultMenuCategories = [
             {
                 id: "hot-drinks",
                 icon: "☕",
-                accentGrad: "from-amber-950/40 via-stone-900/60 to-black",
-                title: {
-                    ar: "المشروبات الساخنة",
-                    en: "Hot Drinks",
-                    ru: "Горячие напитки",
-                    it: "Bevande Calde"
-                },
+                title: { ar: "المشروبات الساخنة", en: "Hot Drinks", ru: "Горячие напитки", it: "Bevande Calde" },
                 items: [
-                    { id: "h1", price: 70, name: { en: "Espresso", ar: "إسبرسو", ru: "Эспрессо", it: "Espresso" } },
-                    { id: "h2", price: 90, name: { en: "Double Espresso", ar: "دبل إسبريسو", ru: "Двойной эспрессо", it: "Doppio Espresso" } },
-                    { id: "h3", price: 80, name: { en: "Turkish Coffee", ar: "قهوة تركي", ru: "Турецкий кофе", it: "Caffè Turco" } },
-                    { id: "h4", price: 100, name: { en: "Cappuccino", ar: "كابتشينو", ru: "Капучино", it: "Cappuccino" } },
-                    { id: "h5", price: 100, name: { en: "Café Latte", ar: "لاتيه", ru: "Кофе латте", it: "Caffè Latte" } },
-                    { id: "h6", price: 80, name: { en: "Americano", ar: "أمريكانو", ru: "Американо", it: "Caffè Americano" } },
-                    { id: "h7", price: 100, name: { en: "Mocha", ar: "موكا", ru: "Мокко", it: "Caffè Mocha" } },
-                    { id: "h8", price: 100, name: { en: "Hot Chocolate", ar: "شوكولاتة ساخنة", ru: "Горячий шоколад", it: "Cioccolata Calda" } },
-                    { id: "h9", price: 90, name: { en: "French Coffee", ar: "قهوة فرنسية", ru: "Французский кофе", it: "Caffè Francese" } },
-                    { id: "h10", price: 100, name: { en: "Hazelnut Coffee", ar: "قهوة بالبندق", ru: "Ореховый кофе", it: "Caffè alla Nocciola" } },
-                    { id: "h11", price: 70, name: { en: "Green Tea", ar: "شاي أخضر", ru: "Зелёный чай", it: "Tè Verde" } },
-                    { id: "h12", price: 70, name: { en: "Mint Tea", ar: "شاي بالنعناع", ru: "Мятный чай", it: "Tè alla Menta" } },
-                    { id: "h13", price: 70, name: { en: "Ginger & Lemon", ar: "جنجر ليمون (زنجبيل بالليمون)", ru: "Имбирь и лимон", it: "Zenzero e Limone" } },
-                    { id: "h14", price: 70, name: { en: "Hibiscus Tea", ar: "كركديه", ru: "Каркаде", it: "Tè all'Ibisco" } }
+                    { id: "h1", price: 70, available: true, name: { en: "Espresso", ar: "إسبرسو", ru: "Эспрессо", it: "Espresso" } },
+                    { id: "h2", price: 90, available: true, name: { en: "Double Espresso", ar: "دبل إسبريسو", ru: "Двойной эспрессо", it: "Doppio Espresso" } },
+                    { id: "h3", price: 80, available: true, name: { en: "Turkish Coffee", ar: "قهوة تركي", ru: "Турецкий кофе", it: "Caffè Turco" } },
+                    { id: "h4", price: 100, available: true, name: { en: "Cappuccino", ar: "كابتشينو", ru: "Капучино", it: "Cappuccino" } },
+                    { id: "h5", price: 100, available: true, name: { en: "Café Latte", ar: "لاتيه", ru: "Кофе латте", it: "Caffè Latte" } },
+                    { id: "h6", price: 80, available: true, name: { en: "Americano", ar: "أمريكانو", ru: "Американо", it: "Caffè Americano" } },
+                    { id: "h7", price: 100, available: true, name: { en: "Mocha", ar: "موكا", ru: "Мокко", it: "Caffè Mocha" } },
+                    { id: "h8", price: 100, available: true, name: { en: "Hot Chocolate", ar: "شوكولاتة ساخنة", ru: "Горячий шоколад", it: "Cioccolata Calda" } },
+                    { id: "h9", price: 90, available: true, name: { en: "French Coffee", ar: "قهوة فرنسية", ru: "Французский кофе", it: "Caffè Francese" } },
+                    { id: "h10", price: 100, available: true, name: { en: "Hazelnut Coffee", ar: "قهوة بالبندق", ru: "Ореховый кофе", it: "Caffè alla Nocciola" } },
+                    { id: "h11", price: 70, available: true, name: { en: "Green Tea", ar: "شاي أخضر", ru: "Зелёный чай", it: "Tè Verde" } },
+                    { id: "h12", price: 70, available: true, name: { en: "Mint Tea", ar: "شاي بالنعناع", ru: "Мятный чай", it: "Tè alla Menta" } },
+                    { id: "h13", price: 70, available: true, name: { en: "Ginger & Lemon", ar: "جنجر ليمون (زنجبيل بالليمون)", ru: "Имбирь и лимон", it: "Zenzero e Limone" } },
+                    { id: "h14", price: 70, available: true, name: { en: "Hibiscus Tea", ar: "كركديه", ru: "Каркаде", it: "Tè all'Ibisco" } }
                 ]
             },
             {
                 id: "cold-drinks",
                 icon: "🧋",
-                accentGrad: "from-orange-950/40 via-amber-950/50 to-black",
-                title: {
-                    ar: "المشروبات الباردة",
-                    en: "Cold Drinks",
-                    ru: "Холодные напитки",
-                    it: "Bevande Fredde"
-                },
+                title: { ar: "المشروبات الباردة", en: "Cold Drinks", ru: "Холодные напитки", it: "Bevande Fredde" },
                 items: [
-                    { id: "c1", price: 90, name: { en: "Iced Americano", ar: "آيس أمريكانو", ru: "Айс американо", it: "Americano Freddo" } },
-                    { id: "c2", price: 100, name: { en: "Iced Latte", ar: "آيس لاتيه", ru: "Айс латте", it: "Latte Freddo" } },
-                    { id: "c3", price: 100, name: { en: "Iced Mocha", ar: "آيس موكا", ru: "Айс мокко", it: "Mocha Freddo" } },
-                    { id: "c4", price: 110, name: { en: "Iced Caramel Latte", ar: "آيس كاراميل لاتيه", ru: "Айс карамель латте", it: "Latte Caramello Freddo" } },
-                    { id: "c5", price: 90, name: { en: "Lemon Mint", ar: "ليمون بالنعناع", ru: "Лимон и мята", it: "Limone e Menta" } },
-                    { id: "c6", price: 100, name: { en: "Fresh Orange Juice", ar: "عصير برتقال فريش", ru: "Свежевыжатый апельсин", it: "Spremuta d'Arancia" } },
-                    { id: "c7", price: 90, name: { en: "Fresh Lemon Juice", ar: "عصير ليمون فريش", ru: "Свежевыжатый лимон", it: "Succo di Limone" } },
-                    { id: "c8", price: 120, name: { en: "Mango Juice", ar: "عصير مانجو", ru: "Манговый сок", it: "Succo di Mango" } },
-                    { id: "c9", price: 110, name: { en: "Strawberry Juice", ar: "عصير فراولة", ru: "Клубничный сок", it: "Succo di Fragola" } },
-                    { id: "c10", price: 100, name: { en: "Guava Juice", ar: "عصير جوافة", ru: "Гуавовый сок", it: "Succo di Guava" } },
-                    { id: "c11", price: 100, name: { en: "Watermelon Juice", ar: "عصير بطيخ", ru: "Арбузный сок", it: "Succo d'Anguria" } },
-                    { id: "c12", price: 120, name: { en: "Pineapple Juice", ar: "عصير أناناس", ru: "Ананасовый сок", it: "Succo d'Ananas" } },
-                    { id: "c13", price: 50, name: { en: "Pepsi", ar: "ببسي", ru: "Пепси", it: "Pepsi" } },
-                    { id: "c14", price: 50, name: { en: "7UP", ar: "سفن أب", ru: "7Up", it: "7Up" } },
-                    { id: "c15", price: 60, name: { en: "Fayrouz", ar: "فيروز", ru: "Файруз", it: "Fayrouz" } },
-                    { id: "c16", price: 15, name: { en: "Water", ar: "مياه معدنية", ru: "Вода", it: "Acqua Minerale" } }
+                    { id: "c1", price: 90, available: true, name: { en: "Iced Americano", ar: "آيس أمريكانو", ru: "Айс американо", it: "Americano Freddo" } },
+                    { id: "c2", price: 100, available: true, name: { en: "Iced Latte", ar: "آيس لاتيه", ru: "Айс латте", it: "Latte Freddo" } },
+                    { id: "c3", price: 100, available: true, name: { en: "Iced Mocha", ar: "آيس موكا", ru: "Айс мокко", it: "Mocha Freddo" } },
+                    { id: "c4", price: 110, available: true, name: { en: "Iced Caramel Latte", ar: "آيس كاراميل لاتيه", ru: "Айс карамель латте", it: "Latte Caramello Freddo" } },
+                    { id: "c5", price: 90, available: true, name: { en: "Lemon Mint", ar: "ليمون بالنعناع", ru: "Лимон и мята", it: "Limone e Menta" } },
+                    { id: "c6", price: 100, available: true, name: { en: "Fresh Orange Juice", ar: "عصير برتقال فريش", ru: "Свежевыжатый апельсин", it: "Spremuta d'Arancia" } },
+                    { id: "c7", price: 90, available: true, name: { en: "Fresh Lemon Juice", ar: "عصير ليمون فريش", ru: "Свежевыжатый лимон", it: "Succo di Limone" } },
+                    { id: "c8", price: 120, available: true, name: { en: "Mango Juice", ar: "عصير مانجو", ru: "Манговый сок", it: "Succo di Mango" } },
+                    { id: "c9", price: 110, available: true, name: { en: "Strawberry Juice", ar: "عصير فراولة", ru: "Клубничный сок", it: "Succo di Fragola" } },
+                    { id: "c10", price: 100, available: true, name: { en: "Guava Juice", ar: "عصير جوافة", ru: "Гуавовый сок", it: "Succo di Guava" } },
+                    { id: "c11", price: 100, available: true, name: { en: "Watermelon Juice", ar: "عصير بطيخ", ru: "Арбузный сок", it: "Succo d'Anguria" } },
+                    { id: "c12", price: 120, available: true, name: { en: "Pineapple Juice", ar: "عصير أناناس", ru: "Ананасовый сок", it: "Succo d'Ananas" } },
+                    { id: "c13", price: 50, available: true, name: { en: "Pepsi", ar: "ببسي", ru: "Пепси", it: "Pepsi" } },
+                    { id: "c14", price: 50, available: true, name: { en: "7UP", ar: "سفن أب", ru: "7Up", it: "7Up" } },
+                    { id: "c15", price: 60, available: true, name: { en: "Fayrouz", ar: "فيروز", ru: "Файруз", it: "Fayrouz" } },
+                    { id: "c16", price: 15, available: true, name: { en: "Water", ar: "مياه معدنية", ru: "Вода", it: "Acqua Minerale" } }
                 ]
             },
             {
                 id: "smoothies",
                 icon: "🍓",
-                accentGrad: "from-pink-950/40 via-rose-950/50 to-black",
-                title: {
-                    ar: "السموذي",
-                    en: "Smoothies",
-                    ru: "Смузи",
-                    it: "Smoothie"
-                },
+                title: { ar: "السموذي", en: "Smoothies", ru: "Смузи", it: "Smoothie" },
                 items: [
-                    { id: "s1", price: 120, name: { en: "Mango Smoothie", ar: "سموذي مانجو", ru: "Манговый смузи", it: "Smoothie al Mango" } },
-                    { id: "s2", price: 110, name: { en: "Strawberry Smoothie", ar: "سموذي فراولة", ru: "Клубничный смузи", it: "Smoothie alla Fragola" } },
-                    { id: "s3", price: 130, name: { en: "Blueberry Smoothie", ar: "سموذي توت أزرق", ru: "Черничный смузи", it: "Smoothie al Mirtillo" } },
-                    { id: "s4", price: 90, name: { en: "Banana Smoothie", ar: "سموذي موز", ru: "Банановый смузи", it: "Smoothie alla Banana" } },
-                    { id: "s5", price: 120, name: { en: "Tropical Smoothie", ar: "سموذي استوائي", ru: "Тропический смузи", it: "Smoothie Tropicale" } },
-                    { id: "s6", price: 110, name: { en: "Strawberry Banana", ar: "فراولة بالموز", ru: "Клубника-банан", it: "Fragola e Banana" } },
-                    { id: "s7", price: 110, name: { en: "Mango Passion Fruit", ar: "مانجو باشن فروت", ru: "Манго и маракуйя", it: "Mango e Frutto della Passione" } },
-                    { id: "s8", price: 130, name: { en: "Mixed Berry", ar: "ميكس بري (التوت المشكل)", ru: "Ягодный микс", it: "Frutti di Bosco Misti" } }
+                    { id: "s1", price: 120, available: true, name: { en: "Mango Smoothie", ar: "سموذي مانجو", ru: "Манговый смузи", it: "Smoothie al Mango" } },
+                    { id: "s2", price: 110, available: true, name: { en: "Strawberry Smoothie", ar: "سموذي فراولة", ru: "Клубничный смузи", it: "Smoothie alla Fragola" } },
+                    { id: "s3", price: 130, available: true, name: { en: "Blueberry Smoothie", ar: "سموذي توت أزرق", ru: "Черничный смузи", it: "Smoothie al Mirtillo" } },
+                    { id: "s4", price: 90, available: true, name: { en: "Banana Smoothie", ar: "سموذي موز", ru: "Банановый смузи", it: "Smoothie alla Banana" } },
+                    { id: "s5", price: 120, available: true, name: { en: "Tropical Smoothie", ar: "سموذي استوائي", ru: "Тропический смузи", it: "Smoothie Tropicale" } },
+                    { id: "s6", price: 110, available: true, name: { en: "Strawberry Banana", ar: "فراولة بالموز", ru: "Клубника-банан", it: "Fragola e Banana" } },
+                    { id: "s7", price: 110, available: true, name: { en: "Mango Passion Fruit", ar: "مانجو باشن فروت", ru: "Манго и маракуйя", it: "Mango e Frutto della Passione" } },
+                    { id: "s8", price: 130, available: true, name: { en: "Mixed Berry", ar: "ميكس بري (التوت المشكل)", ru: "Ягодный микс", it: "Frutti di Bosco Misti" } }
                 ]
             },
             {
                 id: "soda-mocktails",
                 icon: "🍸",
-                accentGrad: "from-cyan-950/40 via-blue-950/50 to-black",
-                title: {
-                    ar: "الصودا والموكتيل",
-                    en: "Soda & Mocktails",
-                    ru: "Газировка и Моктейли",
-                    it: "Soda e Mocktail"
-                },
+                title: { ar: "الصودا والموكتيل", en: "Soda & Mocktails", ru: "Газировка и Моктейли", it: "Soda e Mocktail" },
                 items: [
-                    { id: "m1", price: 100, name: { en: "Blue Lagoon", ar: "بلو لاجون", ru: "Голубая лагуна", it: "Blue Lagoon" } },
-                    { id: "m2", price: 90, name: { en: "Mojito Classic", ar: "موهيتو كلاسيك", ru: "Классический мохито", it: "Mojito Classico" } },
-                    { id: "m3", price: 100, name: { en: "Strawberry Mojito", ar: "موهيتو فراولة", ru: "Клубничный мохито", it: "Mojito alla Fragola" } },
-                    { id: "m4", price: 100, name: { en: "Blueberry Mojito", ar: "موهيتو توت أزرق", ru: "Черничный мохито", it: "Mojito al Mirtillo" } },
-                    { id: "m5", price: 100, name: { en: "Passion Fruit Mojito", ar: "موهيتو باشن فروت", ru: "Мохито маракуйя", it: "Mojito al Frutto della Passione" } },
-                    { id: "m6", price: 90, name: { en: "Green Apple Soda", ar: "صودا تفاح أخضر", ru: "Зеленое яблоко сода", it: "Soda Mela Verde" } },
-                    { id: "m7", price: 90, name: { en: "Strawberry Soda", ar: "صودا فراولة", ru: "Клубничная сода", it: "Soda alla Fragola" } },
-                    { id: "m8", price: 100, name: { en: "Blueberry Soda", ar: "صودا توت أزرق", ru: "Черничная сода", it: "Soda al Mirtillo" } },
-                    { id: "m9", price: 80, name: { en: "Lemon Soda", ar: "صودا ليمون", ru: "Лимонная сода", it: "Soda al Limone" } },
-                    { id: "m10", price: 100, name: { en: "Italian Soda", ar: "صودا إيطالية", ru: "Итальянская сода", it: "Soda Italiana" } }
+                    { id: "m1", price: 100, available: true, name: { en: "Blue Lagoon", ar: "بلو لاجون", ru: "Голубая лагуна", it: "Blue Lagoon" } },
+                    { id: "m2", price: 90, available: true, name: { en: "Mojito Classic", ar: "موهيتو كلاسيك", ru: "Классический мохито", it: "Mojito Classico" } },
+                    { id: "m3", price: 100, available: true, name: { en: "Strawberry Mojito", ar: "موهيتو فراولة", ru: "Клубничный мохито", it: "Mojito alla Fragola" } },
+                    { id: "m4", price: 100, available: true, name: { en: "Blueberry Mojito", ar: "موهيتو توت أزرق", ru: "Черничный мохито", it: "Mojito al Mirtillo" } },
+                    { id: "m5", price: 100, available: true, name: { en: "Passion Fruit Mojito", ar: "موهيتو باشن فروت", ru: "Мохито маракуйя", it: "Mojito al Frutto della Passione" } },
+                    { id: "m6", price: 90, available: true, name: { en: "Green Apple Soda", ar: "صودا تفاح أخضر", ru: "Зеленое яблоко сода", it: "Soda Mela Verde" } },
+                    { id: "m7", price: 90, available: true, name: { en: "Strawberry Soda", ar: "صودا فراولة", ru: "Клубничная сода", it: "Soda alla Fragola" } },
+                    { id: "m8", price: 100, available: true, name: { en: "Blueberry Soda", ar: "صودا توت أزرق", ru: "Черничная сода", it: "Soda al Mirtillo" } },
+                    { id: "m9", price: 80, available: true, name: { en: "Lemon Soda", ar: "صودا ليمون", ru: "Лимонная сода", it: "Soda al Limone" } },
+                    { id: "m10", price: 100, available: true, name: { en: "Italian Soda", ar: "صودا إيطالية", ru: "Итальянская сода", it: "Soda Italiana" } }
                 ]
             },
             {
                 id: "energy-drinks",
                 icon: "⚡",
-                accentGrad: "from-blue-950/45 via-indigo-950/50 to-black",
-                title: {
-                    ar: "مشروبات الطاقة",
-                    en: "Energy Drinks",
-                    ru: "Энергетические напитки",
-                    it: "Energy Drink"
-                },
+                title: { ar: "مشروبات الطاقة", en: "Energy Drinks", ru: "Энергетические напитки", it: "Energy Drink" },
                 items: [
-                    { id: "e1", price: 120, name: { en: "Red Bull", ar: "ريد بول", ru: "Ред Булл", it: "Red Bull" } },
-                    { id: "e2", price: 150, name: { en: "Red Bull Mojito", ar: "ريد بول موهيتو", ru: "Ред Булл Мохито", it: "Red Bull Mojito" } },
-                    { id: "e3", price: 150, name: { en: "Red Bull Blueberry", ar: "ريد بول توت أزرق", ru: "Ред Булл Черника", it: "Red Bull Mirtillo" } },
-                    { id: "e4", price: 150, name: { en: "Red Bull Strawberry", ar: "ريد بول فراولة", ru: "Ред Булл Клубника", it: "Red Bull Fragola" } },
-                    { id: "e5", price: 150, name: { en: "Red Bull Tropical", ar: "ريد بول استوائي", ru: "Ред Булл Тропик", it: "Red Bull Tropical" } },
-                    { id: "e6", price: 130, name: { en: "Monster Energy", ar: "مونستر إنرجي", ru: "Монстр Энерджи", it: "Monster Energy" } }
+                    { id: "e1", price: 120, available: true, name: { en: "Red Bull", ar: "ريد بول", ru: "Ред Булл", it: "Red Bull" } },
+                    { id: "e2", price: 150, available: true, name: { en: "Red Bull Mojito", ar: "ريد بول موهيتو", ru: "Ред Булл Мохито", it: "Red Bull Mojito" } },
+                    { id: "e3", price: 150, available: true, name: { en: "Red Bull Blueberry", ar: "ريد بول توت أزرق", ru: "Ред Булл Черника", it: "Red Bull Mirtillo" } },
+                    { id: "e4", price: 150, available: true, name: { en: "Red Bull Strawberry", ar: "ريد بول فراولة", ru: "Ред Булл Клубника", it: "Red Bull Fragola" } },
+                    { id: "e5", price: 150, available: true, name: { en: "Red Bull Tropical", ar: "ريد بول استوائي", ru: "Ред Булл Тропик", it: "Red Bull Tropical" } },
+                    { id: "e6", price: 130, available: true, name: { en: "Monster Energy", ar: "مونستر إنرجي", ru: "Монстр Энерджи", it: "Monster Energy" } }
                 ]
             },
             {
                 id: "shisha",
                 icon: "💨",
-                accentGrad: "from-amber-950/45 via-yellow-950/50 to-black",
-                title: {
-                    ar: "الشيشة",
-                    en: "Shisha",
-                    ru: "Кальян",
-                    it: "Shisha (Narghilè)"
-                },
+                title: { ar: "الشيشة", en: "Shisha", ru: "Кальян", it: "Shisha (Narghilè)" },
                 items: [
-                    { id: "sh1", price: 150, name: { en: "Double Apple", ar: "تفاحتين / تفاح مزدوج", ru: "Двойное яблоко", it: "Doppia Mela" } },
-                    { id: "sh2", price: 170, name: { en: "Blueberry", ar: "توت", ru: "Черника", it: "Mirtillo" } },
-                    { id: "sh3", price: 160, name: { en: "Grape Mint", ar: "عنب بالنعناع", ru: "Виноград и мята", it: "Uva e Menta" } },
-                    { id: "sh4", price: 160, name: { en: "Watermelon Mint", ar: "بطيخ بالنعناع", ru: "Арбуз и мята", it: "Anguria e Menta" } },
-                    { id: "sh5", price: 150, name: { en: "Lemon Mint", ar: "ليمون بالنعناع", ru: "Лимон и мята", it: "Limone e Menta" } },
-                    { id: "sh6", price: 200, name: { en: "Love 66", ar: "لاف 66", ru: "Лав 66", it: "Love 66" } },
-                    { id: "sh7", price: 200, name: { en: "Lady Killer", ar: "ليدي كيلر", ru: "Леди Киллер", it: "Lady Killer" } },
-                    { id: "sh8", price: 150, name: { en: "Gum Mint", ar: "علكة بالنعناع (لبان بالنعناع)", ru: "Жвачка и мята", it: "Gomma e Menta" } },
-                    { id: "sh9", price: 160, name: { en: "Peach", ar: "خوخ", ru: "Персик", it: "Pesca" } },
-                    { id: "sh10", price: 200, name: { en: "Mixed Flavors", ar: "ميكس نكهات", ru: "Микс вкусов", it: "Gusti Misti" } }
+                    { id: "sh1", price: 150, available: true, name: { en: "Double Apple", ar: "تفاحتين / تفاح مزدوج", ru: "Двойное яблоко", it: "Doppia Mela" } },
+                    { id: "sh2", price: 170, available: true, name: { en: "Blueberry", ar: "توت", ru: "Черника", it: "Mirtillo" } },
+                    { id: "sh3", price: 160, available: true, name: { en: "Grape Mint", ar: "عنب بالنعناع", ru: "Виноград и мята", it: "Uva e Menta" } },
+                    { id: "sh4", price: 160, available: true, name: { en: "Watermelon Mint", ar: "بطيخ بالنعناع", ru: "Арбуз и мята", it: "Anguria e Menta" } },
+                    { id: "sh5", price: 150, available: true, name: { en: "Lemon Mint", ar: "ليمون بالنعناع", ru: "Лимон и мята", it: "Limone e Menta" } },
+                    { id: "sh6", price: 200, available: true, name: { en: "Love 66", ar: "لاف 66", ru: "Лав 66", it: "Love 66" } },
+                    { id: "sh7", price: 200, available: true, name: { en: "Lady Killer", ar: "ليدي كيلر", ru: "Леди Киллер", it: "Lady Killer" } },
+                    { id: "sh8", price: 150, available: true, name: { en: "Gum Mint", ar: "علكة بالنعناع (لبان بالنعناع)", ru: "Жвачка и мята", it: "Gomma e Menta" } },
+                    { id: "sh9", price: 160, available: true, name: { en: "Peach", ar: "خوخ", ru: "Персик", it: "Pesca" } },
+                    { id: "sh10", price: 200, available: true, name: { en: "Mixed Flavors", ar: "ميكس نكهات", ru: "Микс вкусов", it: "Gusti Misti" } }
                 ]
             }
         ];
 
+        function loadData() {
+            try {
+                const savedMenu = localStorage.getItem(STORAGE_KEY_MENU);
+                const savedSettings = localStorage.getItem(STORAGE_KEY_SETTINGS);
+                return {
+                    categories: savedMenu ? JSON.parse(savedMenu) : defaultMenuCategories,
+                    settings: savedSettings ? JSON.parse(savedSettings) : defaultVenueSettings
+                };
+            } catch (e) {
+                return { categories: defaultMenuCategories, settings: defaultVenueSettings };
+            }
+        }
+
+        let { categories: menuCategories, settings: venueSettings } = loadData();
         let currentLang = 'ar';
         let activeCategory = 'all';
         let searchQuery = '';
         let cart = {};
+
+        function getLocalizedText(obj, lang) {
+            if (!obj) return '';
+            return obj[lang] || obj['en'] || obj['ar'] || '';
+        }
 
         function findItemById(id) {
             for (const cat of menuCategories) {
@@ -620,17 +568,17 @@
             document.documentElement.lang = lang;
             document.documentElement.dir = t.dir;
 
-            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('gold-btn-active'));
-            document.getElementById(`lang-${lang}`).classList.add('gold-btn-active');
+            document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('btn-active'));
+            document.getElementById(`lang-${lang}`).classList.add('btn-active');
 
             document.getElementById('navBrand').textContent = t.title;
             document.getElementById('heroSubtitle').textContent = t.subtitle;
             document.getElementById('heroSlogan').textContent = t.slogan;
             document.getElementById('footerSlogan').textContent = t.slogan;
             document.getElementById('locationLabel').textContent = t.locationLabel;
-            document.getElementById('locationText').textContent = t.location;
+            document.getElementById('locationText').textContent = getLocalizedText(venueSettings.location, lang);
             document.getElementById('hoursLabel').textContent = t.hoursLabel;
-            document.getElementById('hoursText').textContent = t.hours;
+            document.getElementById('hoursText').textContent = getLocalizedText(venueSettings.hours, lang);
             document.getElementById('searchInput').placeholder = t.searchPlaceholder;
             document.getElementById('tapToCalcHint').textContent = t.tapHint;
 
@@ -658,17 +606,20 @@
             const t = uiTranslations[currentLang];
 
             let html = `
-                <button onclick="setCategory('all')" class="shrink-0 px-4 py-2 rounded-2xl text-xs sm:text-sm border border-amber-500/40 text-amber-200 transition-all ${activeCategory === 'all' ? 'gold-btn-active' : 'hover:border-amber-400 bg-[#121216]'}">
+                <button onclick="setCategory('all')" class="shrink-0 px-4 py-2 rounded-2xl text-xs sm:text-sm border border-[#E2CEB5] text-[#4A2511] font-semibold transition-all ${activeCategory === 'all' ? 'btn-active' : 'hover:border-[#C86D2D] bg-[#FDF8F2]'}">
                     ✨ ${t.allCategories}
                 </button>
             `;
 
             menuCategories.forEach(cat => {
+                const visibleItems = cat.items.filter(i => i.available !== false);
+                if (visibleItems.length === 0) return;
+
                 const isActive = activeCategory === cat.id;
                 html += `
-                    <button onclick="setCategory('${cat.id}')" class="shrink-0 px-4 py-2 rounded-2xl text-xs sm:text-sm border border-amber-500/40 text-amber-200 transition-all flex items-center gap-1.5 ${isActive ? 'gold-btn-active' : 'hover:border-amber-400 bg-[#121216]'}">
+                    <button onclick="setCategory('${cat.id}')" class="shrink-0 px-4 py-2 rounded-2xl text-xs sm:text-sm border border-[#E2CEB5] text-[#4A2511] font-semibold transition-all flex items-center gap-1.5 ${isActive ? 'btn-active' : 'hover:border-[#C86D2D] bg-[#FDF8F2]'}">
                         <span>${cat.icon}</span>
-                        <span>${cat.title[currentLang]}</span>
+                        <span>${getLocalizedText(cat.title, currentLang)}</span>
                     </button>
                 `;
             });
@@ -716,12 +667,13 @@
                 if (activeCategory !== 'all' && activeCategory !== cat.id) return;
 
                 const filtered = cat.items.filter(item => {
+                    if (item.available === false) return false;
                     if (!searchQuery) return true;
                     return (
-                        item.name.ar.toLowerCase().includes(searchQuery) ||
-                        item.name.en.toLowerCase().includes(searchQuery) ||
-                        item.name.ru.toLowerCase().includes(searchQuery) ||
-                        item.name.it.toLowerCase().includes(searchQuery) ||
+                        (item.name.ar || '').toLowerCase().includes(searchQuery) ||
+                        (item.name.en || '').toLowerCase().includes(searchQuery) ||
+                        (item.name.ru || '').toLowerCase().includes(searchQuery) ||
+                        (item.name.it || '').toLowerCase().includes(searchQuery) ||
                         String(item.price).includes(searchQuery)
                     );
                 });
@@ -732,53 +684,53 @@
                 let itemsHtml = '';
                 filtered.forEach(item => {
                     const qty = cart[item.id] || 0;
-                    const primaryName = item.name[currentLang];
-                    const secondaryName = currentLang !== 'en' ? item.name.en : '';
+                    const primaryName = getLocalizedText(item.name, currentLang);
+                    const secondaryName = currentLang !== 'en' ? (item.name.en || '') : '';
 
                     itemsHtml += `
                         <div onclick="addToOrder('${item.id}')" class="menu-item-row group cursor-pointer rounded-2xl px-3.5 py-3 flex items-baseline justify-between select-none">
                             <div class="flex items-center gap-2.5 pr-1">
-                                <span class="w-6 h-6 rounded-full border border-amber-500/50 flex items-center justify-center text-xs text-amber-300 group-hover:bg-amber-400 group-hover:text-black transition-colors shrink-0 font-bold">
+                                <span class="w-6 h-6 rounded-full border ${qty > 0 ? 'bg-[#C86D2D] text-white border-[#C86D2D]' : 'border-[#C86D2D]/60 text-[#C86D2D] group-hover:bg-[#C86D2D] group-hover:text-white'} flex items-center justify-center text-xs transition-colors shrink-0 font-bold">
                                     ${qty > 0 ? qty : '+'}
                                 </span>
                                 <div>
-                                    <span class="text-amber-50 font-semibold text-sm sm:text-base group-hover:text-amber-300 transition-colors">
+                                    <span class="text-[#2B150A] font-bold text-sm sm:text-base group-hover:text-[#C86D2D] transition-colors">
                                         ${primaryName}
                                     </span>
-                                    ${secondaryName ? `<span class="block text-[11px] text-amber-200/50 font-normal">${secondaryName}</span>` : ''}
+                                    ${secondaryName ? `<span class="block text-[11px] text-[#6E5343] font-normal">${secondaryName}</span>` : ''}
                                 </div>
                             </div>
 
                             <div class="leader-dots"></div>
 
                             <div class="shrink-0 flex items-baseline gap-1">
-                                <span class="text-amber-400 font-extrabold text-base sm:text-lg tracking-tight">${item.price}</span>
-                                <span class="text-[11px] text-amber-200/80 font-medium">${t.currency}</span>
+                                <span class="text-[#4A2511] font-extrabold text-base sm:text-lg tracking-tight">${item.price}</span>
+                                <span class="text-[11px] text-[#C86D2D] font-bold">${t.currency}</span>
                             </div>
                         </div>
                     `;
                 });
 
                 cardsHtml += `
-                    <section class="luxury-card rounded-3xl overflow-hidden flex flex-col">
-                        <div class="bg-gradient-to-r ${cat.accentGrad} border-b border-amber-500/40 px-5 py-4 flex items-center justify-between">
+                    <section class="menu-card rounded-3xl overflow-hidden flex flex-col">
+                        <div class="bg-[#F3E5D0]/65 border-b border-[#E2CEB5] px-5 py-4 flex items-center justify-between">
                             <div class="flex items-center gap-3">
-                                <div class="w-11 h-11 rounded-2xl bg-amber-500/15 border border-amber-400/50 flex items-center justify-center text-2xl shadow-inner">
+                                <div class="w-11 h-11 rounded-2xl bg-[#FDF8F2] border border-[#C86D2D]/40 flex items-center justify-center text-2xl shadow-sm">
                                     ${cat.icon}
                                 </div>
                                 <div>
-                                    <h2 class="font-luxury text-2xl sm:text-3xl font-bold gold-gradient-text">
-                                        ${cat.title[currentLang]}
+                                    <h2 class="font-luxury text-2xl sm:text-3xl font-bold text-[#4A2511]">
+                                        ${getLocalizedText(cat.title, currentLang)}
                                     </h2>
-                                    ${currentLang !== 'en' ? `<p class="text-xs text-amber-300/60 tracking-wider uppercase">${cat.title.en}</p>` : ''}
+                                    ${currentLang !== 'en' && cat.title.en ? `<p class="text-xs text-[#6E5343] tracking-wider uppercase font-semibold">${cat.title.en}</p>` : ''}
                                 </div>
                             </div>
-                            <span class="text-xs text-amber-300/80 bg-black/60 border border-amber-500/30 px-3 py-1 rounded-full font-semibold">
+                            <span class="text-xs text-[#4A2511] bg-[#FDF8F2] border border-[#E2CEB5] px-3 py-1 rounded-full font-bold shadow-xs">
                                 ${filtered.length}
                             </span>
                         </div>
 
-                        <div class="p-3.5 sm:p-5 divide-y divide-amber-500/10 flex-grow">
+                        <div class="p-3.5 sm:p-5 divide-y divide-[#E2CEB5]/60 flex-grow">
                             ${itemsHtml}
                         </div>
                     </section>
@@ -838,15 +790,15 @@
                 totalPrice += lineTotal;
 
                 modalHtml += `
-                    <div class="flex items-center justify-between bg-black/60 border border-amber-500/30 rounded-2xl p-3">
+                    <div class="flex items-center justify-between bg-[#F3E5D0]/55 border border-[#E2CEB5] rounded-2xl p-3">
                         <div>
-                            <div class="font-semibold text-amber-100 text-sm sm:text-base">${item.name[currentLang]}</div>
-                            <div class="text-xs text-amber-400/80">${item.price} ${t.currency} × ${qty} = <span class="font-bold text-amber-300">${lineTotal} ${t.currency}</span></div>
+                            <div class="font-bold text-[#2B150A] text-sm sm:text-base">${getLocalizedText(item.name, currentLang)}</div>
+                            <div class="text-xs text-[#6E5343]">${item.price} ${t.currency} × ${qty} = <span class="font-extrabold text-[#4A2511]">${lineTotal} ${t.currency}</span></div>
                         </div>
                         <div class="flex items-center gap-2">
-                            <button onclick="changeQty('${item.id}', -1)" class="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-300 flex items-center justify-center font-bold hover:bg-amber-500/30">-</button>
-                            <span class="w-6 text-center font-bold text-sm text-amber-100">${qty}</span>
-                            <button onclick="changeQty('${item.id}', 1)" class="w-8 h-8 rounded-xl bg-amber-500/15 border border-amber-500/40 text-amber-300 flex items-center justify-center font-bold hover:bg-amber-500/30">+</button>
+                            <button onclick="changeQty('${item.id}', -1)" class="w-8 h-8 rounded-xl bg-[#FDF8F2] border border-[#E2CEB5] text-[#4A2511] flex items-center justify-center font-bold hover:border-[#C86D2D] hover:text-[#C86D2D]">-</button>
+                            <span class="w-6 text-center font-bold text-sm text-[#2B150A]">${qty}</span>
+                            <button onclick="changeQty('${item.id}', 1)" class="w-8 h-8 rounded-xl bg-[#FDF8F2] border border-[#E2CEB5] text-[#4A2511] flex items-center justify-center font-bold hover:border-[#C86D2D] hover:text-[#C86D2D]">+</button>
                         </div>
                     </div>
                 `;
@@ -873,6 +825,16 @@
                 modal.classList.add('hidden');
             }
         }
+
+        // Sync automatically if admin page updates storage in another tab
+        window.addEventListener('storage', (e) => {
+            if (e.key === STORAGE_KEY_MENU || e.key === STORAGE_KEY_SETTINGS) {
+                const reloaded = loadData();
+                menuCategories = reloaded.categories;
+                venueSettings = reloaded.settings;
+                setLanguage(currentLang);
+            }
+        });
 
         window.onload = function() {
             setLanguage('ar');
